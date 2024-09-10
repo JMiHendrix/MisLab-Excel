@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import React from 'react';
-import { Layout, Menu, theme } from 'antd';
-import { CloudOutlined } from '@ant-design/icons';
+import { Layout, Menu, theme, Breadcrumb, Dropdown, Space, Button } from 'antd';
+import { CloudOutlined, FormOutlined } from '@ant-design/icons';
 import style from './index.module.css'
 const { Content, Sider } = Layout;
 const Home = () => {
@@ -52,7 +52,23 @@ const Home = () => {
                         borderRadius: borderRadiusLG,
                     }}
                 >
-                    Content
+                    <Breadcrumb separator=">" items={[
+                        {
+                            title: '云盘'
+                        }
+                    ]}
+                        style={{
+                            fontSize: '24px'
+                        }}
+                    />
+                    {/* <Space wrap>
+                        <Dropdown.Button>
+                                <Space>
+                                    <FormOutlined />
+                                    Button
+                                </Space>
+                        </Dropdown.Button>
+                    </Space> */}
                 </Content>
             </Layout>
         </Layout>
