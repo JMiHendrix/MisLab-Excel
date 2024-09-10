@@ -6,3 +6,14 @@
   align-items: center;
   font-size: 1.5em;
 }
+:global #root,
+:global body,
+:global html {
+  min-width: 1400px;
+  height: 100%;
+}
+:global .ant-layout {
+  display: flex;
+  width: 100%;
+  min-height: 50%;
+}

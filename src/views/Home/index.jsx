@@ -1,13 +1,16 @@
 import { memo } from 'react'
 import React from 'react';
-import { Layout, Menu, theme, Breadcrumb, Dropdown, Space, Button } from 'antd';
-import { CloudOutlined, FormOutlined } from '@ant-design/icons';
+import { Layout, Menu, theme, Breadcrumb, Space, Button, ConfigProvider } from 'antd';
+import { CloudOutlined } from '@ant-design/icons';
+import { MemoAddNewFile } from '@/components/AddNewFile';
+import { UploadFile } from '@/components/UploadFile';
 import style from './index.module.css'
 const { Content, Sider } = Layout;
 const Home = () => {
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
+
     return (
         <Layout style={{
             height: '100vh'
@@ -61,17 +64,21 @@ const Home = () => {
                             fontSize: '24px'
                         }}
                     />
-                    {/* <Space wrap>
-                        <Dropdown.Button>
-                                <Space>
-                                    <FormOutlined />
-                                    Button
-                                </Space>
-                        </Dropdown.Button>
-                    </Space> */}
+                    <ConfigProvider
+                        wave={{
+                            disabled: true, // 全局禁用波纹效果
+                        }}
+                    >
+                        <Space size={50} style={{
+                            marginTop: 20
+                        }}>
+                            <MemoAddNewFile></MemoAddNewFile>
+                            <UploadFile></UploadFile>
+                        </Space>
+                    </ConfigProvider>
                 </Content>
             </Layout>
-        </Layout>
+        </Layout >
     );
 }
 
