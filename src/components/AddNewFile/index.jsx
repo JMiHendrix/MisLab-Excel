@@ -1,11 +1,25 @@
-import { memo } from 'react'
-import { Dropdown, Button } from 'antd';
-import { DownOutlined, FileAddOutlined, FileExcelOutlined, FileMarkdownOutlined } from '@ant-design/icons';
+import { memo, useState, useRef } from 'react'
+import { Dropdown, Button, Modal, Form, Input } from 'antd';
+import { DownOutlined, FileAddOutlined, FileExcelOutlined, FileMarkdownOutlined, FolderOpenOutlined } from '@ant-design/icons';
 import style from './index.module.css'
 
 const AddNewFile = () => {
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const folderName = useRef('')
+    const showModal = () => {
+        setIsModalOpen(true);
+    };
+    const handleOk = () => {
+        console.log(folderName.current);
+        folderName.current = ''
+        setIsModalOpen(false);
+    };
+    const handleCancel = () => {
+        folderName.current = ''
+        setIsModalOpen(false);
+    };
     const handleMenuClick = (e) => {
-        console.log('click', e);
+        if (e.key === "3") showModal()
     };
     const items = [
         {
@@ -17,6 +31,11 @@ const AddNewFile = () => {
             label: '在线Excel',
             key: '2',
             icon: <FileExcelOutlined />
+        },
+        {
+            label: '文件夹',
+            key: '3',
+            icon: <FolderOpenOutlined />
         }
     ]
 
@@ -25,13 +44,29 @@ const AddNewFile = () => {
         onClick: handleMenuClick,
     };
     return (
-        <Dropdown menu={menuProps} className={style.box}>
+        <>
+            <Dropdown menu={menuProps} className={style.box}>
                 <Button>
                     <FileAddOutlined className={style.firIcon} />
                     新建
                     <DownOutlined className={style.secIcon} />
                 </Button>
-        </Dropdown>
+            </Dropdown>
+            <Modal title={'创建文件夹'} open={isModalOpen} onOk={handleOk} onCancel={handleCancel} okText={'创建'} cancelText={'取消'} destroyOnClose={true}>
+                <Form validateTrigger='onChange' colon={false}>
+                    <Form.Item name='name' label={'名称'}
+                        rules={[() => ({
+                            validator(_, value) {
+                                folderName.current = value
+                                return Promise.resolve()
+                            }
+                        })]}
+                    >
+                        <Input placeholder="请输入文件夹名称" />
+                    </Form.Item>
+                </Form>
+            </Modal>
+        </>
     )
 }
 
