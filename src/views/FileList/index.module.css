@@ -1,0 +1,11 @@
+.fileList :global .ant-table-body {
+  scrollbar-width: auto;
+  scrollbar-color: auto;
+}
+.fileList :global .ant-table-body::-webkit-scrollbar {
+  width: 5px;
+}
+.fileList :global .ant-table-body::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 5px;
+}

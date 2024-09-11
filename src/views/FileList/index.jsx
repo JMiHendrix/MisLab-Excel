@@ -1,6 +1,7 @@
 import React, { memo } from 'react';
 import { Table, Dropdown, Button } from 'antd';
 import { FolderOutlined, PlusSquareOutlined, EllipsisOutlined } from '@ant-design/icons';
+import style from './index.module.css'
 
 const data = [
     {
@@ -163,6 +164,7 @@ const FileList = () => {
                     console.log(record.name);
                 },
             })}
+            className={style.fileList}
         />
     );
 };
