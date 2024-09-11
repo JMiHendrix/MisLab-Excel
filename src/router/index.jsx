@@ -1,6 +1,7 @@
 import { createHashRouter, Navigate } from 'react-router-dom'
 import { MemoHome } from '@/views/Home'
 import { MemoNotFound } from '@/views/NotFound'
+import { MemoFileList } from '@/views/FileList'
 
 const router = createHashRouter([
     {
@@ -9,7 +10,13 @@ const router = createHashRouter([
     },
     {
         path: 'home',
-        element: <MemoHome />
+        element: <MemoHome />,
+        children: [
+            {
+                index: true,
+                element: <MemoFileList />
+            }
+        ]
     },
     {
         path: '*',

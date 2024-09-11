@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import React from 'react';
+import { Outlet, useNavigate } from 'react-router-dom'
 import { Layout, Menu, theme, Breadcrumb, Space, Button, ConfigProvider } from 'antd';
 import { CloudOutlined } from '@ant-design/icons';
 import { MemoAddNewFile } from '@/components/AddNewFile';
@@ -13,7 +13,7 @@ const Home = () => {
 
     return (
         <Layout style={{
-            height: '100vh'
+            height: '100vh',
         }}>
             <Sider
                 width={200}
@@ -76,6 +76,15 @@ const Home = () => {
                             <UploadFile></UploadFile>
                         </Space>
                     </ConfigProvider>
+                    <div
+                        style={{
+                            background: colorBgContainer,
+                            borderRadius: borderRadiusLG,
+                        }}
+                        className={style.fileList}
+                    >
+                        <Outlet></Outlet>
+                    </div>
                 </Content>
             </Layout>
         </Layout >
