@@ -7,19 +7,28 @@ import { UploadFile } from '@/components/UploadFile';
 import { request } from '@/utils';
 import { useMessage } from '@/hooks/useMessage';
 import style from './index.module.css'
+import { useSelector } from 'react-redux';
 const { Content, Sider } = Layout;
 const Home = () => {
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
-    const { contextHolder } = useMessage()
+    const { message, type, visible } = useSelector(state => state.message)
+    const { success, contextHolder } = useMessage()
+    // useEffect(() => {
+    //     request({
+    //         url: '/excel/title',
+    //         method: 'GET'
+    //     })
+    // }
+    //     , [])
     useEffect(() => {
-        request({
-            url: '/excel/title',
-            method: 'GET'
-        })
-    }
-        , [])
+        if (visible && message === '登录成功') {
+            success({
+                content: message
+            })
+        }
+    }, [visible, message, type])
     return (
         <Layout style={{
             height: '100vh',

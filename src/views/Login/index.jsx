@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { Card, Form, Input, Button } from "antd";
+import { Card, Form, Input, Button, message } from "antd";
 import { useDispatch } from "react-redux";
 import { fetchLogin } from "../../store/modules/user";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +7,7 @@ import { useMessage } from "../../hooks/useMessage";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import BG from "../../utils/BG";
 import style from "./index.module.css";
+import { showMessage } from "@/store/modules/message";
 
 const Login = () => {
     const { success, error, contextHolder } = useMessage()
@@ -16,11 +17,13 @@ const Login = () => {
     const onFinish = async (values) => {
         try {
             await dispatch(fetchLogin(values));
-            success({
-                content: '登录成功！',
-                callBack: () => navigate("/home"),
-                delayTime: 0
-            })
+            // success({
+            //     content: '登录成功！',
+            //     callBack: () => navigate("/home"),
+            //     delayTime: 0
+            // })
+            dispatch(showMessage({ message: '登录成功', type: 'success' }))
+            navigate('/home')
         } catch (e) {
             error({
                 content: '账号或密码错误！'
