@@ -2,7 +2,7 @@ import axios from 'axios'
 import { getToken, clearToken } from './token'
 import store from '@/store'
 import { clearUserInfo } from '@/store/modules/user'
-import router from '@/router'
+import { showMessage } from '@/store/modules/message'
 const request = axios.create({
     // node node_modules/cors-anywhere/server.js
     // 解决跨域问题
@@ -34,6 +34,8 @@ request.interceptors.response.use((response) => {
     if (error.response && error.response.status === 401) {
         store.dispatch(clearUserInfo())
         clearToken()
+        // const { message, type, visible } = store.getState().message
+        store.dispatch(showMessage({ message: '未登录或登录已过期，请重新登录', type: 'warn' }))
         window.location.hash = '/login';
     }
     return Promise.reject(error)

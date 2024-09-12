@@ -9,6 +9,8 @@ import { useMessage } from '@/hooks/useMessage';
 import style from './index.module.css'
 import { useSelector, useDispatch } from 'react-redux';
 import { showMessage } from '@/store/modules/message';
+import { clearUserInfo } from '@/store/modules/user';
+import { clearToken } from '@/utils';
 const { Content, Sider } = Layout;
 const Home = () => {
     const {
@@ -20,19 +22,15 @@ const Home = () => {
     const { success, contextHolder } = useMessage()
     const exit = () => {
         dispatch(showMessage({ message: '退出成功', type: 'success' }))
+        dispatch(clearUserInfo())
+        clearToken()
         navigate('/login')
     }
-    // useEffect(() => {
-    //     request({
-    //         url: '/excel/title',
-    //         method: 'GET'
-    //     })
-    // }
-    //     , [])
     useEffect(() => {
         if (visible && message === '登录成功') {
             success({
-                content: message
+                content: message,
+                callBack: () => dispatch(showMessage({ message: '' }))
             })
         }
     }, [visible, message, type])

@@ -10,7 +10,7 @@ export const useMessage = () => {
      * @param {boolean} [option.show = true] - 是否展示message
      * @param {successCallBack} [option.callBack] - 成功回调函数 
      */
-    const success = ({ content = '请求成功！', callBack, delayTime = 2000, show = true } = {}) => {
+    const success = ({ content = '请求成功！', callBack, delayTime = 0, show = true } = {}) => {
         if (show)
         messageApi.open({
             type: 'success',

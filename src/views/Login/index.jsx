@@ -10,8 +10,8 @@ import style from "./index.module.css";
 import { showMessage } from "@/store/modules/message";
 
 const Login = () => {
-    const { success, error, contextHolder } = useMessage()
-    const {message, type, visible} = useSelector(state => state.message)
+    const { success, error, warn, contextHolder } = useMessage()
+    const { message, type, visible } = useSelector(state => state.message)
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -28,8 +28,12 @@ const Login = () => {
     };
 
     useEffect(() => {
-        if(visible && message === '退出成功') {
+        if (visible && message === '退出成功') {
             success({
+                content: message
+            })
+        } else if (visible && type === 'warn') {
+            warn({
                 content: message
             })
         }
