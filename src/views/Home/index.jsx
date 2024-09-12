@@ -1,20 +1,27 @@
 import { memo, useEffect } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
-import { Layout, Menu, theme, Breadcrumb, Space, Button, ConfigProvider } from 'antd';
-import { CloudOutlined } from '@ant-design/icons';
+import { Layout, Menu, theme, Breadcrumb, Space, ConfigProvider, FloatButton } from 'antd';
+import { CloudOutlined, LogoutOutlined } from '@ant-design/icons';
 import { MemoAddNewFile } from '@/components/AddNewFile';
 import { UploadFile } from '@/components/UploadFile';
 import { request } from '@/utils';
 import { useMessage } from '@/hooks/useMessage';
 import style from './index.module.css'
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { showMessage } from '@/store/modules/message';
 const { Content, Sider } = Layout;
 const Home = () => {
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
+    const dispatch = useDispatch();
+    const navigate = useNavigate()
     const { message, type, visible } = useSelector(state => state.message)
     const { success, contextHolder } = useMessage()
+    const exit = () => {
+        dispatch(showMessage({ message: '退出成功', type: 'success' }))
+        navigate('/login')
+    }
     // useEffect(() => {
     //     request({
     //         url: '/excel/title',
@@ -34,6 +41,7 @@ const Home = () => {
             height: '100vh',
         }}>
             {contextHolder}
+            <FloatButton icon={<LogoutOutlined />} type='primary' onClick={exit} />
             <Sider
                 width={200}
                 breakpoint="lg"

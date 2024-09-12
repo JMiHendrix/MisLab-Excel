@@ -1,6 +1,6 @@
-import { memo } from "react";
-import { Card, Form, Input, Button, message } from "antd";
-import { useDispatch } from "react-redux";
+import { memo, useEffect } from "react";
+import { Card, Form, Input, Button } from "antd";
+import { useDispatch, useSelector } from "react-redux";
 import { fetchLogin } from "../../store/modules/user";
 import { useNavigate } from "react-router-dom";
 import { useMessage } from "../../hooks/useMessage";
@@ -11,17 +11,13 @@ import { showMessage } from "@/store/modules/message";
 
 const Login = () => {
     const { success, error, contextHolder } = useMessage()
+    const {message, type, visible} = useSelector(state => state.message)
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const onFinish = async (values) => {
         try {
             await dispatch(fetchLogin(values));
-            // success({
-            //     content: '登录成功！',
-            //     callBack: () => navigate("/home"),
-            //     delayTime: 0
-            // })
             dispatch(showMessage({ message: '登录成功', type: 'success' }))
             navigate('/home')
         } catch (e) {
@@ -30,6 +26,14 @@ const Login = () => {
             })
         }
     };
+
+    useEffect(() => {
+        if(visible && message === '退出成功') {
+            success({
+                content: message
+            })
+        }
+    }, [visible, message, type])
 
     return (
         <div>

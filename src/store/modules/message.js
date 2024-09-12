@@ -10,8 +10,6 @@ const messageStore = createSlice({
   },
   reducers: {
     showMessage(state, action) {
-        console.log(action.payload);
-        
       state.message = action.payload.message;
       state.type = action.payload.type;
       state.visible = true;
