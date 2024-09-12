@@ -1,20 +1,30 @@
-import { memo } from 'react'
+import { memo, useEffect } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
 import { Layout, Menu, theme, Breadcrumb, Space, Button, ConfigProvider } from 'antd';
 import { CloudOutlined } from '@ant-design/icons';
 import { MemoAddNewFile } from '@/components/AddNewFile';
 import { UploadFile } from '@/components/UploadFile';
+import { request } from '@/utils';
+import { useMessage } from '@/hooks/useMessage';
 import style from './index.module.css'
 const { Content, Sider } = Layout;
 const Home = () => {
     const {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
-
+    const { contextHolder } = useMessage()
+    useEffect(() => {
+        request({
+            url: '/excel/title',
+            method: 'GET'
+        })
+    }
+        , [])
     return (
         <Layout style={{
             height: '100vh',
         }}>
+            {contextHolder}
             <Sider
                 width={200}
                 breakpoint="lg"

@@ -1,0 +1,27 @@
+.login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.loginCard {
+  /* 卡片样式 */
+  background-color: rgba(247, 247, 247);
+  border-radius: 10px;
+  padding: 20px;
+  z-index: 99;
+}
+.logo {
+  width: 75px;
+  height: 75px;
+  position: absolute;
+  left: 50%;
+  top: 8%;
+  transform: translateX(-50%);
+  background: url('../../assets/icon.jpg') no-repeat center center / cover;
+  z-index: 99;
+}
+.logoAfter {
+  width: 75px;
+  height: 75px;
+}

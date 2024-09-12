@@ -9,8 +9,7 @@ const AddNewFile = () => {
     const showModal = () => {
         setIsModalOpen(true);
     };
-    const handleOk = () => {
-        console.log(folderName.current);
+    const handleOk = () => {    
         folderName.current = ''
         setIsModalOpen(false);
     };
