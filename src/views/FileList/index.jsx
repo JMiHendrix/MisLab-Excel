@@ -1,109 +1,56 @@
-import React, { memo } from 'react';
-import { Table, Dropdown, Button } from 'antd';
-import { FolderOutlined, PlusSquareOutlined, EllipsisOutlined } from '@ant-design/icons';
+import React, { memo, useEffect, useState } from 'react';
+import { Table, Dropdown, Button, Spin } from 'antd';
+import { FolderOutlined, PlusSquareOutlined, EllipsisOutlined, EditOutlined, FileExcelOutlined, FileOutlined } from '@ant-design/icons';
+import { getFileList } from '@/apis/fileList';
+import { useMessage } from '@/hooks/useMessage';
 import style from './index.module.css'
-
-const data = [
-    {
-        key: '1',
-        name: 'JS',
-        owner: 'Sytus',
-        modified: '昨天 16:07',
-    },
-    {
-        key: '2',
-        name: 'NodeJS',
-        owner: 'Sytus',
-        modified: '3月14日 21:21',
-    },
-    {
-        key: '3',
-        name: 'React',
-        owner: 'Sytus',
-        modified: '今天 14:19',
-    },
-    {
-        key: '4',
-        name: 'TypeScript',
-        owner: 'Sytus',
-        modified: '2023年11月15日',
-    },
-    {
-        key: '5',
-        name: 'Webpack',
-        owner: 'Sytus',
-        modified: '3月26日 17:00',
-    },
-    {
-        key: '6',
-        name: '包管理',
-        owner: 'Sytus',
-        modified: '3月20日 21:24',
-    },
-    {
-        key: '7',
-        name: '计算机网络',
-        owner: 'Sytus',
-        modified: '4月28日 22:20',
-    }, {
-        key: '8',
-        name: '计算机网络',
-        owner: 'Sytus',
-        modified: '4月28日 22:20',
-    }, {
-        key: '9',
-        name: '计算机网络',
-        owner: 'Sytus',
-        modified: '4月28日 22:20',
-    }, {
-        key: '10',
-        name: '计算机网络',
-        owner: 'Sytus',
-        modified: '4月28日 22:20',
-    }, {
-        key: '11',
-        name: '计算机网络',
-        owner: 'Sytus',
-        modified: '4月28日 22:20',
-    }, {
-        key: '12',
-        name: '计算机网络',
-        owner: 'Sytus',
-        modified: '4月28日 22:20',
-    }, {
-        key: '13',
-        name: '计算机网络',
-        owner: 'Sytus',
-        modified: '4月28日 22:20',
-    }, {
-        key: '14',
-        name: '计算机网络',
-        owner: 'Sytus',
-        modified: '4月28日 22:20',
-    },
-];
 
 const columns = [
     {
         title: '名称',
         dataIndex: 'name',
         key: 'name',
-        render: (text, record) => (
-            <span>
-                <FolderOutlined style={{ marginRight: 8 }} />
-                {text}
-            </span>
-        ),
+        render: (text, record) => {
+            if (record.status === 1) {
+                return (
+                    <span>
+                        <EditOutlined style={{ marginRight: 8 }} />
+                        {text}
+                    </span>
+                )
+            } else if (record.status === 2) {
+                return (
+                    <span>
+                        <FolderOutlined style={{ marginRight: 8 }} />
+                        {text}
+                    </span>
+                )
+            } else if (record.status === 3) {
+                return (
+                    <span>
+                        <FileExcelOutlined style={{ marginRight: 8 }} />
+                        {text}
+                    </span>
+                )
+            } else if (record.status === 4) {
+                return (
+                    <span>
+                        <FileOutlined style={{ marginRight: 8 }} />
+                        {text}
+                    </span>
+                )
+            }
+        }
     },
     {
         title: '所有者',
-        dataIndex: 'owner',
-        key: 'owner',
+        dataIndex: 'author',
+        key: 'author',
     },
     {
         title: '修改时间',
-        dataIndex: 'modified',
-        key: 'modified',
+        dataIndex: 'updateTime',
+        key: 'updateTime',
     },
     {
         title: (<div style={{ textAlign: 'center' }}><PlusSquareOutlined /></div>),
@@ -153,19 +100,44 @@ const handleMenuClick = (action, record) => {
 };
 
 const FileList = () => {
+    const { error, contextHolder } = useMessage()
+    const [list, setList] = useState([])
+    const [loading, setLoading] = useState(true)
+    const getList = async (id = '') => {
+        try {
+            setLoading(true)
+            const res = await getFileList(id)
+            setList(res.data)
+            setLoading(false)
+        } catch (e) {
+            error({
+                content: '数据获取失败'
+            })
+        }
+    }
+    useEffect(() => {
+        getList()
+    }, [])
     return (
-        <Table
-            columns={columns}
-            dataSource={data}
-            pagination={false}
-            scroll={{ y: 'calc(100vh - 260px)' }}
-            onRow={(record) => ({
-                onClick: () => {
-                    console.log(record.name);
-                },
-            })}
-            className={style.fileList}
-        />
+        <>
+            {contextHolder}
+            {
+                loading
+                    ? <Spin size='large' className={style.spin} />
+                    : <Table
+                        columns={columns}
+                        dataSource={list.map(item => ({ ...item, key: `${item.id}` + `${item.status}` }))}
+                        pagination={false}
+                        scroll={{ y: 'calc(100vh - 260px)' }}
+                        onRow={(record) => ({
+                            onClick: () => {
+                                console.log(record.name);
+                            },
+                        })}
+                        className={style.fileList}
+                    />
+            }
+        </>
     );
 };
 

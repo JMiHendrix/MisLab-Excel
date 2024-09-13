@@ -4,10 +4,10 @@ import { Layout, Menu, theme, Breadcrumb, Space, ConfigProvider, FloatButton } f
 import { CloudOutlined, LogoutOutlined } from '@ant-design/icons';
 import { MemoAddNewFile } from '@/components/AddNewFile';
 import { UploadFile } from '@/components/UploadFile';
-import { request } from '@/utils';
 import { useMessage } from '@/hooks/useMessage';
 import style from './index.module.css'
 import { useSelector, useDispatch } from 'react-redux';
+import { request } from '@/utils';  // 页面开始前初始化store，不可删，需要在引入store前引入
 import { showMessage } from '@/store/modules/message';
 import { clearUserInfo } from '@/store/modules/user';
 import { clearToken } from '@/utils';
@@ -44,12 +44,6 @@ const Home = () => {
                 width={200}
                 breakpoint="lg"
                 collapsedWidth="0"
-                onBreakpoint={(broken) => {
-                    console.log(broken);
-                }}
-                onCollapse={(collapsed, type) => {
-                    console.log(collapsed, type);
-                }}
                 style={{
                     background: colorBgContainer,
                 }}

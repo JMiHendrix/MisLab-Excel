@@ -34,7 +34,6 @@ request.interceptors.response.use((response) => {
     if (error.response && error.response.status === 401) {
         store.dispatch(clearUserInfo())
         clearToken()
-        // const { message, type, visible } = store.getState().message
         store.dispatch(showMessage({ message: '未登录或登录已过期，请重新登录', type: 'warn' }))
         window.location.hash = '/login';
     }

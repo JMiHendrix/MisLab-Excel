@@ -28,7 +28,7 @@ export const UploadFile = ({ value, onChange, beforeUpload = () => false, maxCou
     >
             <Button type='default'>
                 <CloudUploadOutlined className={style.firIcon} />
-                上传Word
+                上传文件
                 <SelectOutlined className={style.secIcon} />
             </Button>
     </Upload>
