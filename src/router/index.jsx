@@ -3,7 +3,7 @@ import { MemoHome } from '@/views/Home'
 import { MemoNotFound } from '@/views/NotFound'
 import { MemoFileList } from '@/views/FileList'
 import { MemoLogin } from '@/views/Login'
-import AuthRoute from './AuthRoute'
+import { MemoContent } from '@/views/Content'
 
 const router = createHashRouter([
     {
@@ -27,6 +27,10 @@ const router = createHashRouter([
                 element: <MemoFileList />
             }
         ]
+    },
+    {
+        path: 'content/:id',
+        element: <MemoContent />
     },
     {
         path: '*',

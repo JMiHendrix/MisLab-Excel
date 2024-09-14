@@ -5,7 +5,7 @@ import { request } from "@/utils";
  * 1 - 在线文档
  * 2 - 文件夹
  * 3 - excel
- * 4 - word
+ * 4 - 文件
  */
 
 const getFileList = (id = '') => {
