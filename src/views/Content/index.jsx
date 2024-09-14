@@ -1,13 +1,13 @@
 import { memo, useState, useRef, useEffect } from 'react'
 import { theme, Layout, Form, Input, Spin, FloatButton } from 'antd'
-import { HighlightOutlined, RollbackOutlined } from '@ant-design/icons'
+import { HighlightOutlined, RollbackOutlined, CheckOutlined } from '@ant-design/icons'
 import { useNavigate, useParams } from 'react-router-dom'
 import ReactQuill from 'react-quill'
 import ReactHtmlParser from 'react-html-parser';
 import { useQuillTooBar } from '@/hooks/useQuillTooBar'
 import { formatDate } from '@/utils';
 import { useMessage } from '@/hooks/useMessage';
-import { getContentDetail } from '@/apis/content';
+import { getContentDetail, editContent } from '@/apis/content';
 import 'react-quill/dist/quill.snow.css'
 import style from './index.module.css'
 
@@ -40,6 +40,32 @@ const Area = () => {
     const back = () => {
         if (param.folder === 'main') navigate('/home')
         else navigate(`/home/list/${param.folder}`)
+    }
+    const edit = async ({ title, author, content, id = param.id }) => {
+        await editContent({ title, author, content, id })
+        getDetail()
+    }
+    const ChangeIsEdit = () => {
+        if (isEdit) {
+            try {
+                success({
+                    content: '文档更新成功！',
+                    callBack: () => {
+                        edit({
+                            title: title.current,
+                            author: author.current,
+                            content: value,
+                        })
+                    },
+                    delayTime: 0
+                })
+            } catch (e) {
+                error({
+                    content: '文档更新失败'
+                })
+            }
+        }
+        setIsEdit(!isEdit)
     }
     useEffect(() => {
         const fetchData = async () => {
@@ -145,19 +171,20 @@ const Area = () => {
                 <FloatButton.Group
                     shape="circle"
                     style={{
-                        insetInlineEnd: 72,
+                        insetInlineEnd: 36,
                     }}
                 >
                     <FloatButton
                         type="primary"
-                        icon={<HighlightOutlined />}
+                        icon={isEdit ? <CheckOutlined /> : <HighlightOutlined />}
+                        onClick={ChangeIsEdit}
                     />
                     <FloatButton
                         type="primary"
                         icon={<RollbackOutlined />}
                         onClick={back}
                     />
-                    </FloatButton.Group>
+                </FloatButton.Group>
             </Layout >
         </>
     )

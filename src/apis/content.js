@@ -7,6 +7,21 @@ const getContentDetail = (id) => {
     })
 }
 
+const editContent = ({ title, author, content, id } = {}) => {
+    const data = {
+        title,
+        author,
+        content,
+        id
+    }
+    return request({
+        url: 'text/update',
+        method: 'PUT',
+        data
+    })
+}
+
 export {
-    getContentDetail
+    getContentDetail,
+    editContent
 }
