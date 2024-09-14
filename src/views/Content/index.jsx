@@ -117,7 +117,7 @@ const Area = () => {
                                         >
                                             <Form.Item
                                                 name='title'
-                                                label='论文名称'
+                                                label='文章名称'
                                                 rules={[() => ({
                                                     validator(_, value) {
                                                         title.current = value
@@ -129,7 +129,7 @@ const Area = () => {
                                             </Form.Item>
                                             <Form.Item
                                                 name='author'
-                                                label='论文作者'
+                                                label='文章作者'
                                                 rules={[() => ({
                                                     validator(_, value) {
                                                         author.current = value
