@@ -4,6 +4,7 @@ import { Table, Dropdown, Button, Spin } from 'antd';
 import { FolderOutlined, PlusSquareOutlined, EllipsisOutlined, EditOutlined, FileExcelOutlined, FileOutlined } from '@ant-design/icons';
 import { getFileList } from '@/apis/fileList';
 import { useMessage } from '@/hooks/useMessage';
+import { formatDate } from '@/utils';
 import style from './index.module.css'
 
 const columns = [
@@ -131,11 +132,14 @@ const FileList = () => {
                     ? <Spin size='large' className={style.spin} />
                     : <Table
                         columns={columns}
-                        dataSource={list.map(item => ({ ...item, key: `${item.id}` + `${item.status}` }))}
+                        dataSource={list.map(item => ({ ...item, key: `${item.id}` + `${item.status}`, updateTime: formatDate(item.updateTime) }))}
                         pagination={false}
                         scroll={{ y: 'calc(100vh - 260px)' }}
                         onRow={(record) => ({
                             onClick: () => {
+                                if (record.status === 1) {
+                                    navigate(`/content/${record.id}`)
+                                }
                                 if (record.status === 2) {
                                     navigate(`/home/list/${record.id}`)
                                 }
