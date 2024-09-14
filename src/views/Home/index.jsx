@@ -24,7 +24,7 @@ const Home = () => {
     const [folderLayer, setFolderLayer] = useState([])
     const [folderTree, SetFolderTree] = useState([])
     const { message, type, visible } = useSelector(state => state.message)
-    const { success, contextHolder } = useMessage()
+    const { success, error, contextHolder } = useMessage()
     const exit = () => {
         dispatch(showMessage({ message: '退出成功', type: 'success' }))
         dispatch(clearUserInfo())
@@ -45,10 +45,10 @@ const Home = () => {
             }))
         ])
     }
-    const getTree = async () => {
-        const res = await getFolderTree()
-        SetFolderTree(res.data)
-    }
+    // const getTree = async () => {
+    //     const res = await getFolderTree()
+    //     SetFolderTree(res.data)
+    // }
     const transformToMenuItems = (data) => {
         return data.map(item => ({
             key: `/home/list/${item.id}`, // 生成唯一的key
@@ -71,13 +71,19 @@ const Home = () => {
                 }
             ])
         } else if (param.id) {
-            getLayerList(param.id)
+            try {
+                getLayerList(param.id)
+            } catch (e) {
+                error({
+                    content: '导航加载失败，请检查网络'
+                })
+            }
         }
 
     }, [visible, message, type, param.id])
-    useEffect(() => {
-        getTree()
-    }, []) //TODO 判定条件
+    // useEffect(() => {
+    //     getTree()
+    // }, []) //TODO 判定条件
     return (
         <Layout style={{
             height: '100vh',
@@ -100,10 +106,10 @@ const Home = () => {
                             key: '/home',
                             icon: <CloudOutlined />,
                             label: '云盘',
-                            children: transformToMenuItems(folderTree)
+                            // children: transformToMenuItems(folderTree)
                         }
                     ]}
-                    onClick={(e) => navigate(e.key)} 
+                // onClick={(e) => navigate(e.key)} 
                 />
             </Sider>
             <Layout
