@@ -1,7 +1,7 @@
 import { memo, useEffect, useState } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
 import { Layout, Menu, theme, Breadcrumb, Space, ConfigProvider, FloatButton } from 'antd';
-import { CloudOutlined, LogoutOutlined } from '@ant-design/icons';
+import { CloudOutlined, LogoutOutlined, FolderOutlined } from '@ant-design/icons';
 import { MemoAddNewFile } from '@/components/AddNewFile';
 import { UploadFile } from '@/components/UploadFile';
 import { useMessage } from '@/hooks/useMessage';
@@ -12,7 +12,7 @@ import { showMessage } from '@/store/modules/message';
 import { clearUserInfo } from '@/store/modules/user';
 import { clearToken } from '@/utils';
 import { useParams } from 'react-router-dom';
-import { getLayer } from '@/apis/folder'
+import { getLayer, getFolderTree } from '@/apis/folder'
 const { Content, Sider } = Layout;
 const Home = () => {
     const {
@@ -22,6 +22,7 @@ const Home = () => {
     const navigate = useNavigate()
     const param = useParams()
     const [folderLayer, setFolderLayer] = useState([])
+    const [folderTree, SetFolderTree] = useState([])
     const { message, type, visible } = useSelector(state => state.message)
     const { success, contextHolder } = useMessage()
     const exit = () => {
@@ -44,6 +45,18 @@ const Home = () => {
             }))
         ])
     }
+    const getTree = async () => {
+        const res = await getFolderTree()
+        SetFolderTree(res.data)
+    }
+    const transformToMenuItems = (data) => {
+        return data.map(item => ({
+            key: `/home/list/${item.id}`, // 生成唯一的key
+            icon: <FolderOutlined />,
+            label: item.name, // 使用name作为标签
+            children: item.children && item.children.length > 0 ? transformToMenuItems(item.children) : undefined, // 如果有children，递归转换
+        }));
+    };
     useEffect(() => {
         if (visible && message === '登录成功') {
             success({
@@ -62,6 +75,9 @@ const Home = () => {
         }
 
     }, [visible, message, type, param.id])
+    useEffect(() => {
+        getTree()
+    }, []) //TODO 判定条件
     return (
         <Layout style={{
             height: '100vh',
@@ -84,8 +100,10 @@ const Home = () => {
                             key: '/home',
                             icon: <CloudOutlined />,
                             label: '云盘',
+                            children: transformToMenuItems(folderTree)
                         }
                     ]}
+                    onClick={(e) => navigate(e.key)} 
                 />
             </Sider>
             <Layout

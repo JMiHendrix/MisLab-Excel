@@ -11,6 +11,14 @@ const getLayer = (id) => {
     })
 }
 
+const getFolderTree = () => {
+    return request({
+        url: '/folder/tree',
+        method: 'GET'
+    })
+}
+
 export {
-    getLayer
+    getLayer,
+    getFolderTree
 }
