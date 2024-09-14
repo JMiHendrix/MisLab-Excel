@@ -1,6 +1,7 @@
 import { memo, useState, useRef, useEffect } from 'react'
-import { theme, Layout, Form, Input, Spin } from 'antd'
-import { useParams } from 'react-router-dom'
+import { theme, Layout, Form, Input, Spin, FloatButton } from 'antd'
+import { HighlightOutlined, RollbackOutlined } from '@ant-design/icons'
+import { useNavigate, useParams } from 'react-router-dom'
 import ReactQuill from 'react-quill'
 import ReactHtmlParser from 'react-html-parser';
 import { useQuillTooBar } from '@/hooks/useQuillTooBar'
@@ -24,6 +25,7 @@ const Area = () => {
     const title = useRef('')
     const author = useRef('')
     const time = useRef({})
+    const navigate = useNavigate()
     const getDetail = async (id = param.id) => {
         const res = await getContentDetail(id)
         const detail = res.data
@@ -34,6 +36,10 @@ const Area = () => {
             updateTime: formatDate(detail.updateTime)
         }
         setValue(detail.content)
+    }
+    const back = () => {
+        if (param.folder === 'main') navigate('/home')
+        else navigate(`/home/list/${param.folder}`)
     }
     useEffect(() => {
         const fetchData = async () => {
@@ -136,6 +142,22 @@ const Area = () => {
                             )
                     }
                 </Content>
+                <FloatButton.Group
+                    shape="circle"
+                    style={{
+                        insetInlineEnd: 72,
+                    }}
+                >
+                    <FloatButton
+                        type="primary"
+                        icon={<HighlightOutlined />}
+                    />
+                    <FloatButton
+                        type="primary"
+                        icon={<RollbackOutlined />}
+                        onClick={back}
+                    />
+                    </FloatButton.Group>
             </Layout >
         </>
     )

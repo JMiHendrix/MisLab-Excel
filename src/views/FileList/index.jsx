@@ -138,7 +138,8 @@ const FileList = () => {
                         onRow={(record) => ({
                             onClick: () => {
                                 if (record.status === 1) {
-                                    navigate(`/content/${record.id}`)
+                                    if (param.id === undefined) navigate(`/content/main/${record.id}`)
+                                    else navigate(`/content/${param.id}/${record.id}`)
                                 }
                                 if (record.status === 2) {
                                     navigate(`/home/list/${record.id}`)

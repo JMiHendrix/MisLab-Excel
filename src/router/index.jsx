@@ -29,7 +29,7 @@ const router = createHashRouter([
         ]
     },
     {
-        path: 'content/:id',
+        path: 'content/:folder/:id',
         element: <MemoContent />
     },
     {
