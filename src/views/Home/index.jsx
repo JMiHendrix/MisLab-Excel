@@ -1,4 +1,4 @@
-import { memo, useEffect } from 'react'
+import { memo, useEffect, useState } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
 import { Layout, Menu, theme, Breadcrumb, Space, ConfigProvider, FloatButton } from 'antd';
 import { CloudOutlined, LogoutOutlined } from '@ant-design/icons';
@@ -11,6 +11,8 @@ import { request } from '@/utils';  // 页面开始前初始化store，不可删
 import { showMessage } from '@/store/modules/message';
 import { clearUserInfo } from '@/store/modules/user';
 import { clearToken } from '@/utils';
+import { useParams } from 'react-router-dom';
+import { getLayer } from '@/apis/folder'
 const { Content, Sider } = Layout;
 const Home = () => {
     const {
@@ -18,6 +20,8 @@ const Home = () => {
     } = theme.useToken();
     const dispatch = useDispatch();
     const navigate = useNavigate()
+    const param = useParams()
+    const [folderLayer, setFolderLayer] = useState([])
     const { message, type, visible } = useSelector(state => state.message)
     const { success, contextHolder } = useMessage()
     const exit = () => {
@@ -26,6 +30,20 @@ const Home = () => {
         clearToken()
         navigate('/login')
     }
+    const getLayerList = async (id) => {
+        const res = await getLayer(id)
+        let layer = res.data.reverse()
+        setFolderLayer([
+            {
+                title: '云盘',
+                onClick: () => navigate('/home')
+            },
+            ...layer.map(item => ({
+                title: item.name,
+                onClick: () => navigate(`/home/list/${item.id}`)
+            }))
+        ])
+    }
     useEffect(() => {
         if (visible && message === '登录成功') {
             success({
@@ -33,7 +51,17 @@ const Home = () => {
                 callBack: () => dispatch(showMessage({ message: '' }))
             })
         }
-    }, [visible, message, type])
+        if (param.id === undefined) {
+            setFolderLayer([
+                {
+                    title: '云盘',
+                }
+            ])
+        } else if (param.id) {
+            getLayerList(param.id)
+        }
+
+    }, [visible, message, type, param.id])
     return (
         <Layout style={{
             height: '100vh',
@@ -74,14 +102,11 @@ const Home = () => {
                         borderRadius: borderRadiusLG,
                     }}
                 >
-                    <Breadcrumb separator=">" items={[
-                        {
-                            title: '云盘'
-                        }
-                    ]}
+                    <Breadcrumb separator=">" items={folderLayer}
                         style={{
                             fontSize: '24px'
                         }}
+                        className={style.breadcrumb}
                     />
                     <ConfigProvider
                         wave={{

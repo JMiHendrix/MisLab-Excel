@@ -21,6 +21,10 @@ const router = createHashRouter([
             {
                 index: true,
                 element: <MemoFileList />
+            },
+            {
+                path: 'list/:id',
+                element: <MemoFileList />
             }
         ]
     },

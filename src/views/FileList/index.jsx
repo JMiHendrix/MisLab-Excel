@@ -1,4 +1,5 @@
 import React, { memo, useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Table, Dropdown, Button, Spin } from 'antd';
 import { FolderOutlined, PlusSquareOutlined, EllipsisOutlined, EditOutlined, FileExcelOutlined, FileOutlined } from '@ant-design/icons';
 import { getFileList } from '@/apis/fileList';
@@ -44,8 +45,8 @@ const columns = [
     },
     {
         title: '所有者',
-        dataIndex: 'author',
-        key: 'author',
+        dataIndex: 'owner',
+        key: 'owner',
     },
     {
         title: '修改时间',
@@ -100,6 +101,8 @@ const handleMenuClick = (action, record) => {
 };
 
 const FileList = () => {
+    const param = useParams()
+    const navigate = useNavigate()
     const { error, contextHolder } = useMessage()
     const [list, setList] = useState([])
     const [loading, setLoading] = useState(true)
@@ -113,11 +116,13 @@ const FileList = () => {
             error({
                 content: '数据获取失败'
             })
+            setLoading(false)
         }
     }
     useEffect(() => {
-        getList()
-    }, [])
+        if (param.id === undefined) getList()
+        else getList(param.id)
+    }, [param.id])
     return (
         <>
             {contextHolder}
@@ -131,7 +136,10 @@ const FileList = () => {
                         scroll={{ y: 'calc(100vh - 260px)' }}
                         onRow={(record) => ({
                             onClick: () => {
-                                console.log(record.name);
+                                if (record.status === 2) {
+                                    navigate(`/home/list/${record.id}`)
+                                }
+
                             },
                         })}
                         className={style.fileList}

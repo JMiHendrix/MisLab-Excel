@@ -28,3 +28,16 @@
         min-height: 50%;
     }
 }
+
+.breadcrumb {
+    :global {
+        .ant-breadcrumb-link {
+            height: 0;
+            transition: color .4s ease
+        }
+
+        .ant-breadcrumb-link:hover {
+            color: rgba(0, 0, 0, 0.88);
+        }
+    }
+}
