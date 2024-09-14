@@ -35,20 +35,23 @@ const Area = () => {
         }
         setValue(detail.content)
     }
-    useEffect(async () => {
-        try {
-            await getDetail()
-            success({
-                content: '论文获取成功',
-                callBack: setIsLoading(false)
-            })
-        } catch (e) {
-            error({
-                content: '论文获取失败',
-                callBack: setIsLoading(false) 
-            })
-        }
-    }, [])
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                await getDetail();
+                success({
+                    content: '文档获取成功',
+                    callBack: () => setIsLoading(false)
+                });
+            } catch (e) {
+                error({
+                    content: '文档获取失败',
+                    callBack: () => setIsLoading(false)
+                });
+            }
+        };
+        fetchData();
+    }, [param.id])
     return (
         <>
             {contextHolder}
