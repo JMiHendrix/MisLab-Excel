@@ -20,7 +20,7 @@ const Area = () => {
     const { modules, formats } = useQuillTooBar()
     const [value, setValue] = useState(``)
     const [isEdit, setIsEdit] = useState(false)
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(true)
     const title = useRef('')
     const author = useRef('')
     const time = useRef({})
@@ -35,17 +35,17 @@ const Area = () => {
         }
         setValue(detail.content)
     }
-    useEffect(() => {
+    useEffect(async () => {
         try {
-            getDetail()
+            await getDetail()
             success({
                 content: '论文获取成功',
-                callBack: setIsLoading(true)
+                callBack: setIsLoading(false)
             })
         } catch (e) {
             error({
                 content: '论文获取失败',
-                callBack: setIsLoading(true)
+                callBack: setIsLoading(false) 
             })
         }
     }, [])
@@ -71,63 +71,66 @@ const Area = () => {
                     }}
                 >
                     {
-                        isLoading ?
-                            (isEdit ?
-                                <Form
-                                    className={style.editBox}
-                                    initialValues={{ title: title.current, author: author.current }}
-                                    validateTrigger='onChange'
-                                >
-                                    <Form.Item
-                                        name='title'
-                                        label='论文名称'
-                                        rules={[() => ({
-                                            validator(_, value) {
-                                                title.current = value
-                                                return Promise.resolve()
-                                            }
-                                        })]}
-                                    >
-                                        <Input size='large' style={{ width: '90%' }}></Input>
-                                    </Form.Item>
-                                    <Form.Item
-                                        name='author'
-                                        label='论文作者'
-                                        rules={[() => ({
-                                            validator(_, value) {
-                                                author.current = value
-                                                return Promise.resolve()
-                                            }
-                                        })]}
-                                    >
-                                        <Input size='large' style={{ width: '90%' }}></Input>
-                                    </Form.Item>
-                                </Form >
-                                :
-                                ReactHtmlParser(`
-                                    <h1>${title.current}</h1>
-                                    <h2>作者：${author.current}</h2>
-                                    <h3>创建时间：${time.current.createTime}&nbsp;&nbsp;&nbsp;&nbsp;更新时间：${time.current.updateTime}</h3>
-                                    `)
+                        isLoading ? <Spin size='large' className={style.spin} /> :
+                            (
+                                isEdit ?
+                                    <>
+                                        <Form
+                                            className={style.editBox}
+                                            initialValues={{ title: title.current, author: author.current }}
+                                            validateTrigger='onChange'
+                                        >
+                                            <Form.Item
+                                                name='title'
+                                                label='论文名称'
+                                                rules={[() => ({
+                                                    validator(_, value) {
+                                                        title.current = value
+                                                        return Promise.resolve()
+                                                    }
+                                                })]}
+                                            >
+                                                <Input size='large' style={{ width: '90%' }}></Input>
+                                            </Form.Item>
+                                            <Form.Item
+                                                name='author'
+                                                label='论文作者'
+                                                rules={[() => ({
+                                                    validator(_, value) {
+                                                        author.current = value
+                                                        return Promise.resolve()
+                                                    }
+                                                })]}
+                                            >
+                                                <Input size='large' style={{ width: '90%' }}></Input>
+                                            </Form.Item>
+                                        </Form >
+                                        <ReactQuill
+                                            theme="snow"
+                                            value={value}
+                                            onChange={setValue}
+                                            className={style.contentEdit}
+                                            modules={modules}
+                                            formats={formats}
+                                        />
+                                    </>
+                                    :
+                                    <>
+                                        {
+                                            ReactHtmlParser(`
+                                        <h1>${title.current}</h1>
+                                        <h2>作者：${author.current}</h2>
+                                        <h3>创建时间：${time.current.createTime}&nbsp;&nbsp;&nbsp;&nbsp;更新时间：${time.current.updateTime}</h3>
+                                        `)
+                                        }
+                                        <div className='ql-container ql-snow' style={{ maxHeight: 'calc(100vh - 220px)' }}>
+                                            <div className='ql-editor'>
+                                                {ReactHtmlParser(value)}
+                                            </div>
+                                        </div>
+                                    </>
+
                             )
-                            : <Spin size='large' className={style.spin} />
-                    }
-                    {
-                        isEdit ?
-                            <ReactQuill
-                                theme="snow"
-                                value={value}
-                                onChange={setValue}
-                                className={style.contentEdit}
-                                modules={modules}
-                                formats={formats}
-                            />
-                            :
-                            <div className='ql-container ql-snow' style={{ maxHeight: 'calc(100vh - 220px)' }}>
-                                <div className='ql-editor'>
-                                    {ReactHtmlParser(value)}
-                                </div>
-                            </div>
                     }
                 </Content>
             </Layout >
