@@ -9,6 +9,9 @@
   background: #ccc;
   border-radius: 5px;
 }
+:global .ant-dropdown-menu {
+  width: 52px;
+}
 .spin {
   position: absolute;
   top: 50%;

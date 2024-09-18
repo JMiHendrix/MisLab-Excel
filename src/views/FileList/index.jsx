@@ -80,10 +80,11 @@ const columns = [
                     <Dropdown
                         menu={{ items: menuItems }}
                         trigger={['click']}
+                        className={style.dropdown}
                     >
                         <Button
                             icon={<EllipsisOutlined />}
-                            size="small"
+                            size="big"
                             style={{ border: 'none' }}
                         />
                     </Dropdown>

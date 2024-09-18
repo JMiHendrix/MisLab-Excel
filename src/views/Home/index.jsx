@@ -81,9 +81,6 @@ const Home = () => {
         }
 
     }, [visible, message, type, param.id])
-    // useEffect(() => {
-    //     getTree()
-    // }, []) //TODO 判定条件
     return (
         <Layout style={{
             height: '100vh',
