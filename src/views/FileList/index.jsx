@@ -1,7 +1,7 @@
 import React, { memo, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Table, Dropdown, Button, Spin } from 'antd';
-import { FolderOutlined, PlusSquareOutlined, EllipsisOutlined, EditOutlined, FileExcelOutlined, FileOutlined } from '@ant-design/icons';
+import { FolderOutlined, PlusSquareOutlined, EllipsisOutlined, EditOutlined, TableOutlined, FileOutlined } from '@ant-design/icons';
 import { getFileList } from '@/apis/fileList';
 import { useMessage } from '@/hooks/useMessage';
 import { formatDate } from '@/utils';
@@ -30,7 +30,7 @@ const columns = [
             } else if (record.status === 3) {
                 return (
                     <span>
-                        <FileExcelOutlined style={{ marginRight: 8 }} />
+                        <TableOutlined style={{ marginRight: 8 }} />
                         {text}
                     </span>
                 )
@@ -143,6 +143,10 @@ const FileList = () => {
                                 if (record.status === 1) {
                                     if (param.id === undefined) navigate(`/content/main/${record.id}`)
                                     else navigate(`/content/${param.id}/${record.id}`)
+                                }
+                                if (record.status === 3) {
+                                    if (param.id === undefined) navigate(`/excel/main/${record.id}`)
+                                    else navigate(`/excel/${param.id}/${record.id}`)
                                 }
                                 if (record.status === 2) {
                                     navigate(`/home/list/${record.id}`)

@@ -4,6 +4,7 @@ import { MemoNotFound } from '@/views/NotFound'
 import { MemoFileList } from '@/views/FileList'
 import { MemoLogin } from '@/views/Login'
 import { MemoContent } from '@/views/Content'
+import { MemoExcel } from '@/views/Excel'
 
 const router = createHashRouter([
     {
@@ -31,6 +32,10 @@ const router = createHashRouter([
     {
         path: 'content/:folder/:id',
         element: <MemoContent />
+    },
+    {
+        path: 'excel/:folder/:id',
+        element: <MemoExcel />
     },
     {
         path: '*',

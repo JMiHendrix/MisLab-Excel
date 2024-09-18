@@ -71,10 +71,11 @@ const Area = () => {
         const fetchData = async () => {
             try {
                 await getDetail();
-                success({
-                    content: '文档获取成功',
-                    callBack: () => setIsLoading(false)
-                });
+                // success({
+                //     content: '文档获取成功',
+                //     callBack: () => setIsLoading(false)
+                // });
+                setIsLoading(false)
             } catch (e) {
                 error({
                     content: '文档获取失败',
