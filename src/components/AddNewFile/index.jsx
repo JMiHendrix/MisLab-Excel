@@ -1,15 +1,18 @@
 import { memo, useState, useRef } from 'react'
 import { Dropdown, Button, Modal, Form, Input } from 'antd';
+import { useNavigate, useParams } from 'react-router-dom';
 import { DownOutlined, FileAddOutlined, FileExcelOutlined, FileMarkdownOutlined, FolderOpenOutlined } from '@ant-design/icons';
 import style from './index.module.css'
 
 const AddNewFile = () => {
     const [isModalOpen, setIsModalOpen] = useState(false)
+    const navigate = useNavigate()
+    const param = useParams()
     const folderName = useRef('')
     const showModal = () => {
         setIsModalOpen(true);
     };
-    const handleOk = () => {    
+    const handleOk = () => {
         folderName.current = ''
         setIsModalOpen(false);
     };
@@ -18,6 +21,12 @@ const AddNewFile = () => {
         setIsModalOpen(false);
     };
     const handleMenuClick = (e) => {
+        if (e.key === '1') {
+            if (param.id === undefined)
+                navigate(`/addContent/main`)
+            else navigate(`/addContent/${param.id}`)
+        }
+        if (e.key === '2') navigate(`/addExcel`)
         if (e.key === "3") showModal()
     };
     const items = [

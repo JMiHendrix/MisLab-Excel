@@ -21,7 +21,22 @@ const editContent = ({ title, author, content, id } = {}) => {
     })
 }
 
+const addContent = ({ title, author, content, folderId } = {}) => {
+    const data = {
+        title,
+        author,
+        content,
+        folderId
+    }
+    return request({
+        url: '/text/add',
+        method: "POST",
+        data
+    })
+}
+
 export {
     getContentDetail,
-    editContent
+    editContent,
+    addContent
 }
