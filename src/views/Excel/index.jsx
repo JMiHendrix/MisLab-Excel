@@ -1,10 +1,12 @@
 import { memo, useRef, useState, useEffect } from 'react'
+import * as XLSX from 'xlsx'
 import { useNavigate, useParams } from 'react-router-dom'
-import { Button, Drawer, Form, Input, Spin, FloatButton, Space } from 'antd';
+import { Button, Drawer, Form, Input, Spin, FloatButton, Space, Modal } from 'antd';
 import { RollbackOutlined, CheckOutlined, VerticalAlignBottomOutlined, UpOutlined } from '@ant-design/icons'
 import { MemoSheet } from '@/components/UniverSheet';
 import { useMessage } from '@/hooks/useMessage';
 import { getExcelDetail, updateExcel } from '@/apis/excel';
+import { convertToExcelFormat } from '@/utils';
 import style from './index.module.css'
 
 const Excel = () => {
@@ -17,6 +19,7 @@ const Excel = () => {
     const [loading, setLoading] = useState(true)
     const [open, setOpen] = useState(false);
     const navigate = useNavigate()
+    // 初始化逻辑
     const getDetail = async (id = param.id) => {
         const res = await getExcelDetail(id)
         const { title, url, createTime, updateTime } = res.data
@@ -29,6 +32,7 @@ const Excel = () => {
         if (param.folder === 'main') navigate('/home')
         else navigate(`/home/list/${param.folder}`)
     }
+    // 更新逻辑
     const showDrawer = () => {
         setOpen(true);
     };
@@ -52,6 +56,33 @@ const Excel = () => {
             })
         }
     }
+    // 导出逻辑
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const ExportExcelName = useRef('MISLab-Excel')
+    const showModal = () => {
+        setIsModalOpen(true);
+    };
+    const handleOk = () => {
+        setIsModalOpen(false);
+        handleExportExcel()
+    };
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    };
+    const handleExportExcel = () => {
+        // 创建一个工作簿
+        const workbook = XLSX.utils.book_new();
+
+        // 遍历每个工作表并将其添加到工作簿中
+        Object.keys(data.sheets).forEach(sheetName => {
+            const sheetData = data.sheets[sheetName].cellData;
+            const excelFormat = convertToExcelFormat(sheetData);
+            if (excelFormat['!ref'] === 'A1:\x00-Infinity') excelFormat['!ref'] = 'A1:A2'
+            // console.log("format", excelFormat);
+            XLSX.utils.book_append_sheet(workbook, excelFormat, data.sheets[sheetName].name);
+        });
+        XLSX.writeFile(workbook, `${ExportExcelName.current}.xlsx`, { compression: true });
+    };
     useEffect(() => {
         try {
             getDetail(param.id)
@@ -96,7 +127,7 @@ const Excel = () => {
                                 />
                                 <FloatButton
                                     icon={<VerticalAlignBottomOutlined />}
-                                // onClick={back}
+                                    onClick={showModal}
                                 />
                                 <FloatButton
                                     icon={<RollbackOutlined />}
@@ -130,6 +161,20 @@ const Excel = () => {
                     <Button onClick={onClose} danger style={{ width: 100 }}>取消</Button>
                 </Space>
             </Drawer>
+            <Modal title="请输入下载 Excel 文件的名称：" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} okText="确认" cancelText="取消">
+                <Form validateTrigger='onChange'>
+                    <Form.Item name={'excel'}
+                        rules={[() => ({
+                            validator(_, value) {
+                                ExportExcelName.current = value
+                                return Promise.resolve()
+                            }
+                        })]}
+                    >
+                        <Input />
+                    </Form.Item>
+                </Form>
+            </Modal>
         </>
     )
 }

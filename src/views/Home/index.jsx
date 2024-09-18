@@ -86,7 +86,13 @@ const Home = () => {
             height: '100vh',
         }}>
             {contextHolder}
-            <FloatButton icon={<LogoutOutlined />} type='primary' onClick={exit} />
+            <FloatButton
+                icon={<LogoutOutlined />}
+                type='primary'
+                onClick={exit}
+                style={{
+                    insetInlineEnd: 36,
+                }} />
             <Sider
                 width={200}
                 breakpoint="lg"
