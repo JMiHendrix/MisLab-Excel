@@ -6,6 +6,7 @@ import { MemoLogin } from '@/views/Login'
 import { MemoContent } from '@/views/Content'
 import { MemoExcel } from '@/views/Excel'
 import { MemoAddContent } from '@/views/AddContent'
+import { MemoAddExcel } from '@/views/AddExcel'
 
 const router = createHashRouter([
     {
@@ -41,6 +42,10 @@ const router = createHashRouter([
     {
         path: 'excel/:folder/:id',
         element: <MemoExcel />
+    },
+    {
+        path: 'addExcel/:folder',
+        element: <MemoAddExcel />
     },
     {
         path: '*',

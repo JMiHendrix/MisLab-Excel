@@ -19,7 +19,20 @@ const updateExcel = ({ id, title, url }) => {
     })
 }
 
+const addExcel = ({ folderId, title, url }) => {
+    return request({
+        url: '/excel/upload',
+        method: 'POST',
+        data: {
+            folderId,
+            title,
+            url
+        }
+    })
+}
+
 export {
     getExcelDetail,
-    updateExcel
+    updateExcel,
+    addExcel
 }

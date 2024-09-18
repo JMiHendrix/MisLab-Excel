@@ -26,7 +26,11 @@ const AddNewFile = () => {
                 navigate(`/addContent/main`)
             else navigate(`/addContent/${param.id}`)
         }
-        if (e.key === '2') navigate(`/addExcel`)
+        if (e.key === '2') {
+            if (param.id === undefined)
+                navigate(`/addExcel/main`)
+            else navigate(`/addExcel/${param.id}`)
+        }
         if (e.key === "3") showModal()
     };
     const items = [
