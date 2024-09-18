@@ -7,6 +7,19 @@ const getExcelDetail = (id) => {
     })
 }
 
+const updateExcel = ({ id, title, url }) => {
+    return request({
+        url: '/excel/update',
+        method: 'PUT',
+        data: {
+            id,
+            title,
+            url
+        }
+    })
+}
+
 export {
-    getExcelDetail
+    getExcelDetail,
+    updateExcel
 }
