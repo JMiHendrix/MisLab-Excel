@@ -80,7 +80,9 @@ const columns = [
                     <Dropdown
                         menu={{ items: menuItems }}
                         trigger={['click']}
-                        className={style.dropdown}
+                        overlayStyle={{
+                            width: '60px'
+                        }}
                     >
                         <Button
                             icon={<EllipsisOutlined />}
