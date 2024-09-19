@@ -101,7 +101,7 @@ const Home = () => {
                     background: colorBgContainer,
                 }}
             >
-                <div className={style.logo}>论文管理系统</div>
+                <div className={style.logo}>文件管理系统</div>
                 <Menu
                     mode="inline"
                     items={[

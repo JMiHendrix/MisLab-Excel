@@ -3,6 +3,7 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { Table, Dropdown, Button, Spin } from 'antd';
 import { FolderOutlined, PlusSquareOutlined, EllipsisOutlined, EditOutlined, TableOutlined, FileOutlined } from '@ant-design/icons';
 import { getFileList } from '@/apis/fileList';
+import { delContent, delExcel, delFolder } from '@/apis/delete';
 import { useMessage } from '@/hooks/useMessage';
 import { formatDate } from '@/utils';
 import style from './index.module.css'
@@ -129,11 +130,21 @@ const FileList = () => {
             setLoading(false)
         }
     }
-    const handleMenuClick = (action, record) => {
+    const handleMenuClick = async (action, record) => {
         if (action === 'details') {
             handleClick(record)
         } else if (action === 'delete') {
-            console.log('删除:', record);
+            if (record.status === 1) {
+                await delContent(record.id)
+            }
+            if (record.status === 2) {
+                await delFolder(record.id)
+            }
+            if (record.status === 3) {
+                await delExcel(record.id)
+            }
+            if (param.id === undefined) getList()
+            else getList(param.id)
         }
     };
     const handleClick = (record) => {

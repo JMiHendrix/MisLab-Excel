@@ -25,7 +25,8 @@ const AddNewFile = () => {
             })
             folderName.current = ''
             setIsModalOpen(false);
-            navigate(`/home/list/1`, { state: { refresh: Date.now() } })                 // TODO: 文件夹跳转
+            if (param.id === undefined)  navigate(`/home`, { state: { refresh: Date.now() } })   
+            else navigate(`/home/list/${param.id}`, { state: { refresh: Date.now() } })                 // TODO: 文件夹跳转
         } catch (e) {
             error({
                 content: '新增文件夹失败',
