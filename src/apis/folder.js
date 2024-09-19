@@ -13,7 +13,7 @@ const getLayer = (id) => {
 
 const getFolderTree = () => {
     return request({
-        url: '/folder/tree',
+        url: '/home/tree',
         method: 'GET'
     })
 }

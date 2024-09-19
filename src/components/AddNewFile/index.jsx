@@ -28,7 +28,7 @@ const AddNewFile = () => {
             folderName.current = ''
             setIsModalOpen(false);
             setLoading(false)
-            navigate(`/home/list/${res.data}`)
+            navigate(`/home/list/${res.data}`, { state: { refresh: Date.now() } })
         } catch (e) {
             error({
                 content: '新增文件夹失败',
@@ -90,13 +90,13 @@ const AddNewFile = () => {
                 </Button>
             </Dropdown>
             <Modal title={'创建文件夹'}
-            open={isModalOpen} 
-            onOk={handleOk} 
-            onCancel={handleCancel} 
-            okText={'创建'} 
-            cancelText={'取消'} 
-            destroyOnClose={true}
-            confirmLoading={loading}
+                open={isModalOpen}
+                onOk={handleOk}
+                onCancel={handleCancel}
+                okText={'创建'}
+                cancelText={'取消'}
+                destroyOnClose={true}
+                confirmLoading={loading}
             >
                 <Form validateTrigger='onChange' colon={false}>
                     <Form.Item name='name' label={'名称'}

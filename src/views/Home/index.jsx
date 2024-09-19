@@ -1,7 +1,7 @@
 import { memo, useEffect, useState } from 'react'
-import { Outlet, useNavigate } from 'react-router-dom'
+import { Outlet, useNavigate, useLocation } from 'react-router-dom'
 import { Layout, Menu, theme, Breadcrumb, Space, ConfigProvider, FloatButton } from 'antd';
-import { CloudOutlined, LogoutOutlined, FolderOutlined } from '@ant-design/icons';
+import { CloudOutlined, LogoutOutlined, FolderOutlined, EditOutlined, TableOutlined, FileOutlined } from '@ant-design/icons';
 import { MemoAddNewFile } from '@/components/AddNewFile';
 import { UploadFile } from '@/components/UploadFile';
 import { useMessage } from '@/hooks/useMessage';
@@ -20,6 +20,7 @@ const Home = () => {
     } = theme.useToken();
     const dispatch = useDispatch();
     const navigate = useNavigate()
+    const location = useLocation()
     const param = useParams()
     const [folderLayer, setFolderLayer] = useState([])
     const [folderTree, SetFolderTree] = useState([])
@@ -51,17 +52,62 @@ const Home = () => {
             })
         }
     }
-    // const getTree = async () => {
-    //     const res = await getFolderTree()
-    //     SetFolderTree(res.data)
-    // }
+    const getTree = async () => {
+        try {
+            const res = await getFolderTree()
+            SetFolderTree(res.data)
+        } catch (e) {
+            error({
+                content: '侧边栏获取失败'
+            })
+        }
+    }
     const transformToMenuItems = (data) => {
-        return data.map(item => ({
-            key: `/home/list/${item.id}`, // 生成唯一的key
-            icon: <FolderOutlined />,
-            label: item.name, // 使用name作为标签
-            children: item.children && item.children.length > 0 ? transformToMenuItems(item.children) : undefined, // 如果有children，递归转换
-        }));
+        return data.map(item => {
+            const returnKey = () => {
+                if (item.parentId === null) {
+                    if (item.status === 1) {
+                        return `/content/main/${item.id}`
+                    }
+                    if (item.status === 2) {
+                        return `${item.createTime}${item.id}`
+                    }
+                    if (item.status === 3) {
+                        return `/excel/main/${item.id}`
+                    }
+                    if (item.status === 4) {
+                        return `${item.name}${item.id}`
+                    }
+                } else {
+                    if (item.status === 1) {
+                        return `/content/${item.parentId}/${item.id}`
+                    }
+                    if (item.status === 2) {
+                        return `${item.createTime}${item.id}`
+                    }
+                    if (item.status === 3) {
+                        return `/excel/${item.parentId}/${item.id}`
+                    }
+                    if (item.status === 4) {
+                        return `${item.name}${item.id}`
+                    }
+                }
+            }
+            const returnIcon = () => {
+                if (item.status === 1) return <EditOutlined />
+                if (item.status === 2) return <FolderOutlined />
+                if (item.status === 3) return <TableOutlined />
+                if (item.status === 4) return <FileOutlined />
+            }
+            return {
+                key: returnKey(),
+                icon: returnIcon(),
+                label: item.name,
+                children: item.children && item.children.length > 0
+                    ? transformToMenuItems(item.children)
+                    : undefined,
+            }
+        });
     };
     useEffect(() => {
         if (visible && message === '登录成功') {
@@ -80,6 +126,12 @@ const Home = () => {
             getLayerList(param.id)
         }
     }, [visible, message, type, param.id])
+    useEffect(() => {
+        getTree()
+    }, [])
+    useEffect(() => {
+        if (location.state?.refresh) getTree()
+    }, [location.state])
     return (
         <Layout style={{
             height: '100vh',
@@ -108,10 +160,12 @@ const Home = () => {
                             key: '/home',
                             icon: <CloudOutlined />,
                             label: '云盘',
-                            // children: transformToMenuItems(folderTree)
+                            children: transformToMenuItems(folderTree)
                         }
                     ]}
-                // onClick={(e) => navigate(e.key)} 
+                    onClick={(e) => {
+                        console.log(e.key);
+                    }}
                 />
             </Sider>
             <Layout

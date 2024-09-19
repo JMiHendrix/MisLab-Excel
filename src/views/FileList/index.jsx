@@ -130,6 +130,10 @@ const FileList = () => {
             setLoading(false)
         }
     }
+    const refreshUrl = () => {
+        if (param.id === undefined) navigate(`/home`, { state: { refresh: Date.now() } })
+        else navigate(`/home/list/${param.id}`, { state: { refresh: Date.now() } })
+    }
     const handleMenuClick = async (action, record) => {
         if (action === 'details') {
             handleClick(record)
@@ -151,6 +155,7 @@ const FileList = () => {
                     setLoading(true)
                     await delFile(record.id)
                 }
+                refreshUrl()
             } catch (e) {
                 error({
                     content: '删除失败',
