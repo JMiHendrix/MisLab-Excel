@@ -32,18 +32,24 @@ const Home = () => {
         navigate('/login')
     }
     const getLayerList = async (id) => {
-        const res = await getLayer(id)
-        let layer = res.data.reverse()
-        setFolderLayer([
-            {
-                title: '云盘',
-                onClick: () => navigate('/home')
-            },
-            ...layer.map(item => ({
-                title: item.name,
-                onClick: () => navigate(`/home/list/${item.id}`)
-            }))
-        ])
+        try {
+            const res = await getLayer(id)
+            let layer = res.data.reverse()
+            setFolderLayer([
+                {
+                    title: '云盘',
+                    onClick: () => navigate('/home')
+                },
+                ...layer.map(item => ({
+                    title: item.name,
+                    onClick: () => navigate(`/home/list/${item.id}`)
+                }))
+            ])
+        } catch (e) {
+            error({
+                content: '导航加载失败，请检查网络'
+            })
+        }
     }
     // const getTree = async () => {
     //     const res = await getFolderTree()
@@ -71,15 +77,8 @@ const Home = () => {
                 }
             ])
         } else if (param.id) {
-            try {
-                getLayerList(param.id)
-            } catch (e) {
-                error({
-                    content: '导航加载失败，请检查网络'
-                })
-            }
+            getLayerList(param.id)
         }
-
     }, [visible, message, type, param.id])
     return (
         <Layout style={{
