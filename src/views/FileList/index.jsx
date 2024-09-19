@@ -124,10 +124,9 @@ const FileList = () => {
             setList(res.data)
             setLoading(false)
         } catch (e) {
-            // TODO
-            // error({
-            //     content: '数据获取失败'
-            // })
+            error({
+                content: '数据获取失败'
+            })
             setLoading(false)
         }
     }

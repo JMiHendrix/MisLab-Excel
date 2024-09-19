@@ -79,7 +79,6 @@ const Area = () => {
         };
         fetchData();
     }, [param.id])
-    // TODO
     useEffect(() => {
         let intervalId;
         if (isEdit) {

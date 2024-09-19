@@ -19,14 +19,13 @@ const AddNewFile = () => {
         try {
             let parentId = ''
             if (param.id !== undefined) parentId = param.id
-            await addFolder({
+            const res = await addFolder({
                 name: folderName.current,
                 parentId
             })
             folderName.current = ''
             setIsModalOpen(false);
-            if (param.id === undefined)  navigate(`/home`, { state: { refresh: Date.now() } })   
-            else navigate(`/home/list/${param.id}`, { state: { refresh: Date.now() } })                 // TODO: 文件夹跳转
+            navigate(`/home/list/${res.data}`)
         } catch (e) {
             error({
                 content: '新增文件夹失败',
