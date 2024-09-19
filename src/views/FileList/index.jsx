@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { Table, Dropdown, Button, Spin } from 'antd';
 import { FolderOutlined, PlusSquareOutlined, EllipsisOutlined, EditOutlined, TableOutlined, FileOutlined } from '@ant-design/icons';
 import { getFileList } from '@/apis/fileList';
@@ -112,6 +112,7 @@ const FileList = () => {
     ];
     const param = useParams()
     const navigate = useNavigate()
+    const location = useLocation()
     const { error, contextHolder } = useMessage()
     const [list, setList] = useState([])
     const [loading, setLoading] = useState(true)
@@ -152,6 +153,11 @@ const FileList = () => {
         if (param.id === undefined) getList()
         else getList(param.id)
     }, [param.id])
+    useEffect(() => {
+        if (location.state?.refresh)
+            if (param.id === undefined) getList()
+            else getList(param.id)
+    }, [location.state])
     return (
         <>
             {contextHolder}
