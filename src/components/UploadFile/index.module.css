@@ -20,9 +20,25 @@
   width: 200px;
   height: 64px;
 }
-.result {
-  position: absolute;
-  z-index: 99;
-  width: 100vw;
-  height: 100vw;
+.fullScreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff;
+  z-index: 999;
+  opacity: 0;
+  animation: fadeIn 0.5s forwards;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }

@@ -134,14 +134,24 @@ const FileList = () => {
         if (action === 'details') {
             handleClick(record)
         } else if (action === 'delete') {
-            if (record.status === 1) {
-                await delContent(record.id)
-            }
-            if (record.status === 2) {
-                await delFolder(record.id)
-            }
-            if (record.status === 3) {
-                await delExcel(record.id)
+            try {
+                if (record.status === 1) {
+                    setLoading(true)
+                    await delContent(record.id)
+                }
+                if (record.status === 2) {
+                    setLoading(true)
+                    await delFolder(record.id)
+                }
+                if (record.status === 3) {
+                    setLoading(true)
+                    await delExcel(record.id)
+                }
+            } catch (e) {
+                error({
+                    content: '删除失败',
+                    callBack: () => setLoading(false)
+                })
             }
             if (param.id === undefined) getList()
             else getList(param.id)
