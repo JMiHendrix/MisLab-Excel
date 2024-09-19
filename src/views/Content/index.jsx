@@ -48,15 +48,13 @@ const Area = () => {
     const ChangeIsEdit = () => {
         if (isEdit) {
             try {
+                edit({
+                    title: title.current,
+                    author: author.current,
+                    content: value,
+                })
                 success({
                     content: '文档更新成功！',
-                    callBack: () => {
-                        edit({
-                            title: title.current,
-                            author: author.current,
-                            content: value,
-                        })
-                    },
                     delayTime: 0
                 })
             } catch (e) {
@@ -71,10 +69,6 @@ const Area = () => {
         const fetchData = async () => {
             try {
                 await getDetail();
-                // success({
-                //     content: '文档获取成功',
-                //     callBack: () => setIsLoading(false)
-                // });
                 setIsLoading(false)
             } catch (e) {
                 error({
@@ -85,6 +79,29 @@ const Area = () => {
         };
         fetchData();
     }, [param.id])
+    // TODO
+    useEffect(() => {
+        let intervalId;
+        if (isEdit) {
+            const saveContent = async () => {
+                try {
+                    await editContent({
+                        title: title.current,
+                        author: author.current,
+                        content: value,
+                        id: param.id
+                    });
+                } catch (e) {
+                    error({
+                        content: '实时更新失败，请尝试手动提交'
+                    });
+                }
+            };
+            intervalId = setInterval(saveContent, 3000); 
+        }
+        return () => clearInterval(intervalId);
+    }, [isEdit, value]); 
+    
     return (
         <>
             {contextHolder}

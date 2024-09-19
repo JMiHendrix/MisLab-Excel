@@ -92,6 +92,20 @@ const Excel = () => {
                 callBack: () => setLoading(false)
             })
         }
+        const saveExcel = setInterval(async () => {
+            try {
+                await updateExcel({
+                    title: excelName.current,
+                    url: JSON.stringify(univerRef.current?.getData()),
+                    id: param.id
+                })
+            } catch (e) {
+                error({
+                    content: '实时更新失败，请尝试手动提交'
+                })
+            }
+        }, 10000)
+        return () => clearInterval(saveExcel);
     }, [])
     useEffect(() => {
         if (!loading) {
