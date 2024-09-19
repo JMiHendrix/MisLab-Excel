@@ -9,6 +9,7 @@ import style from './index.module.css'
 export const UploadFile = ({ value, onChange, maxCount = 1 }) => {
     const { success, error, contextHolder } = useMessage()
     const param = useParams()
+    const navigate = useNavigate()
     const [loading, setLoading] = useState(false)
     const beforeUpload = async (file) => {
         let id = ''
@@ -26,10 +27,17 @@ export const UploadFile = ({ value, onChange, maxCount = 1 }) => {
                 }
             })
         } catch (e) {
-            error({
-                content: '上传文件失败',
-                callBack: () => setLoading(false)
-            })
+            if (e.response.data.message === '文件已存在，请重新命名或选择其他文件夹上传') {
+                error({
+                    content: '文件已存在，请重新命名或选择其他文件夹上传',
+                    callBack: () => setLoading(false)
+                })
+            } else {
+                error({
+                    content: '上传文件失败',
+                    callBack: () => setLoading(false)
+                })
+            }
         }
         return false; // 阻止默认上传行为
     };

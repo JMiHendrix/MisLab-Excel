@@ -6,7 +6,6 @@ import * as XLSX from 'xlsx'
 import { MemoSheet } from '@/components/UniverSheet';
 import { useMessage } from '@/hooks/useMessage';
 import { convertToExcelFormat } from '@/utils';
-import { DEFAULT_WORKBOOK_DATA } from '@/assets/default-data'
 import { addExcel } from '@/apis/excel';
 import style from './index.module.css'
 
@@ -15,6 +14,7 @@ const AddExcel = () => {
     const [open, setOpen] = useState(false);
     const [data] = useState({})
     const [loading, setLoading] = useState(false)
+    const [btnLoading, setBtnLoading] = useState(false)
     const univerRef = useRef();
     const excelName = useRef('')
     const navigate = useNavigate()
@@ -33,6 +33,7 @@ const AddExcel = () => {
     const add = async () => {
         try {
             setLoading(true)
+            setBtnLoading(true)
             let folder = ''
             if (param.folder !== 'main') folder = param.folder
             await addExcel({
@@ -40,12 +41,16 @@ const AddExcel = () => {
                 url: JSON.stringify(univerRef.current?.getData()),
                 folderId: folder
             })
+            setBtnLoading(false)
             if (param.folder === 'main') navigate('/home')
             else navigate(`/home/list/${param.folder}`)
         } catch (e) {
             error({
                 content: '新增Excel失败',
-                callBack: () => setLoading(false)
+                callBack: () => {
+                    setBtnLoading(false)
+                    setLoading(false)
+                }
             })
         }
     }
@@ -78,7 +83,7 @@ const AddExcel = () => {
         XLSX.writeFile(workbook, `${ExportExcelName.current}.xlsx`, { compression: true });
     };
 
-    useEffect(() => {        
+    useEffect(() => {
         if (!loading) {
             setTimeout(() => {
                 const toolbar = document.querySelector('.univer-toolbar');
@@ -140,7 +145,7 @@ const AddExcel = () => {
                     </Form.Item>
                 </Form>
                 <Space size={130} style={{ width: '100%' }}>
-                    <Button onClick={add} type='primary' style={{ width: 100 }}>确认</Button>
+                    <Button onClick={add} type='primary' style={{ width: 100 }} loading={btnLoading}>确认</Button>
                     <Button onClick={onClose} danger style={{ width: 100 }}>取消</Button>
                 </Space>
             </Drawer>

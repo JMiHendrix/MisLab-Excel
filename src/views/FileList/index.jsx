@@ -3,7 +3,7 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { Table, Dropdown, Button, Spin } from 'antd';
 import { FolderOutlined, PlusSquareOutlined, EllipsisOutlined, EditOutlined, TableOutlined, FileOutlined } from '@ant-design/icons';
 import { getFileList } from '@/apis/fileList';
-import { delContent, delExcel, delFolder } from '@/apis/delete';
+import { delContent, delExcel, delFolder, delFile } from '@/apis/delete';
 import { useMessage } from '@/hooks/useMessage';
 import { formatDate } from '@/utils';
 import style from './index.module.css'
@@ -146,6 +146,10 @@ const FileList = () => {
                 if (record.status === 3) {
                     setLoading(true)
                     await delExcel(record.id)
+                }
+                if (record.status === 4) {
+                    setLoading(true)
+                    await delFile(record.id)
                 }
             } catch (e) {
                 error({

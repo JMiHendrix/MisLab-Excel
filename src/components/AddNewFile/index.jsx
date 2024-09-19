@@ -8,6 +8,7 @@ import style from './index.module.css'
 
 const AddNewFile = () => {
     const [isModalOpen, setIsModalOpen] = useState(false)
+    const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
     const param = useParams()
     const { error, contextHolder } = useMessage()
@@ -19,12 +20,14 @@ const AddNewFile = () => {
         try {
             let parentId = ''
             if (param.id !== undefined) parentId = param.id
+            setLoading(true)
             const res = await addFolder({
                 name: folderName.current,
                 parentId
             })
             folderName.current = ''
             setIsModalOpen(false);
+            setLoading(false)
             navigate(`/home/list/${res.data}`)
         } catch (e) {
             error({
@@ -32,6 +35,7 @@ const AddNewFile = () => {
                 callBack: () => {
                     folderName.current = ''
                     setIsModalOpen(false);
+                    setLoading(false)
                 }
             })
         }
@@ -85,7 +89,15 @@ const AddNewFile = () => {
                     <DownOutlined className={style.secIcon} />
                 </Button>
             </Dropdown>
-            <Modal title={'创建文件夹'} open={isModalOpen} onOk={handleOk} onCancel={handleCancel} okText={'创建'} cancelText={'取消'} destroyOnClose={true}>
+            <Modal title={'创建文件夹'}
+            open={isModalOpen} 
+            onOk={handleOk} 
+            onCancel={handleCancel} 
+            okText={'创建'} 
+            cancelText={'取消'} 
+            destroyOnClose={true}
+            confirmLoading={loading}
+            >
                 <Form validateTrigger='onChange' colon={false}>
                     <Form.Item name='name' label={'名称'}
                         rules={[() => ({

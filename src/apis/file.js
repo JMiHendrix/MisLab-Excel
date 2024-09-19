@@ -5,7 +5,7 @@ const uploadFile = ({ id, file }) => {
     data.append('id', id)
     data.append('file', file)
     return request({
-        url: '/upload',
+        url: '/minio/upload',
         headers: {
             'Content-Type': 'multipart/form-data',
         },

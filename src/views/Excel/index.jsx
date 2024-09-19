@@ -17,6 +17,7 @@ const Excel = () => {
     const [data, setData] = useState(false);
     const [title, setTitle] = useState('')
     const [loading, setLoading] = useState(true)
+    const [btnLoading, setBtnLoading] = useState(false)
     const [open, setOpen] = useState(false);
     const navigate = useNavigate()
     // 初始化逻辑
@@ -41,6 +42,7 @@ const Excel = () => {
     };
     const finishEdit = async () => {
         try {
+            setBtnLoading(true)
             await updateExcel({
                 title: excelName.current,
                 url: JSON.stringify(data),
@@ -48,11 +50,17 @@ const Excel = () => {
             })
             success({
                 content: '更新Excel成功！',
-                callBack: onClose()
+                callBack: () => {
+                    setBtnLoading(false)
+                    onClose()
+                }
             })
         } catch (e) {
             error({
-                content: '更新Excel失败'
+                content: '更新Excel失败',
+                callBack: () => {
+                    setBtnLoading(false)
+                }
             })
         }
     }
@@ -171,7 +179,7 @@ const Excel = () => {
                     </Form.Item>
                 </Form>
                 <Space size={130} style={{ width: '100%' }}>
-                    <Button onClick={finishEdit} type='primary' style={{ width: 100 }}>确认</Button>
+                    <Button onClick={finishEdit} type='primary' style={{ width: 100 }} loading={btnLoading}>确认</Button>
                     <Button onClick={onClose} danger style={{ width: 100 }}>取消</Button>
                 </Space>
             </Drawer>

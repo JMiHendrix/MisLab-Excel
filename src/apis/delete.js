@@ -21,8 +21,16 @@ const delFolder = (id) => {
     })
 }
 
+const delFile = (id) => {
+    return request({
+        url: `/minio/delete/${id}`,
+        method: 'DELETE'
+    })
+}
+
 export {
     delContent,
     delExcel,
-    delFolder
+    delFolder,
+    delFile
 }
