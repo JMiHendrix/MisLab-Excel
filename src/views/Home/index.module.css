@@ -29,3 +29,10 @@
 .breadcrumb :global .ant-breadcrumb-link:hover {
   color: rgba(0, 0, 0, 0.88);
 }
+.sider::-webkit-scrollbar {
+  width: 5px;
+}
+.sider::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 5px;
+}

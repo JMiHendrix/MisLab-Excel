@@ -65,31 +65,31 @@ const Home = () => {
     const transformToMenuItems = (data) => {
         return data.map(item => {
             const returnKey = () => {
-                if (item.parentId === null) {
+                if (item.folderId === null) {
                     if (item.status === 1) {
                         return `/content/main/${item.id}`
                     }
                     if (item.status === 2) {
-                        return `${item.createTime}${item.id}`
+                        return `/home/list/${item.id}`
                     }
                     if (item.status === 3) {
                         return `/excel/main/${item.id}`
                     }
                     if (item.status === 4) {
-                        return `${item.name}${item.id}`
+                        return `file${item.name}${item.id}`
                     }
                 } else {
                     if (item.status === 1) {
-                        return `/content/${item.parentId}/${item.id}`
+                        return `/content/${item.folderId}/${item.id}`
                     }
                     if (item.status === 2) {
-                        return `${item.createTime}${item.id}`
+                        return `/home/list/${item.id}`
                     }
                     if (item.status === 3) {
-                        return `/excel/${item.parentId}/${item.id}`
+                        return `/excel/${item.folderId}/${item.id}`
                     }
                     if (item.status === 4) {
-                        return `${item.name}${item.id}`
+                        return `file${item.name}${item.id}`
                     }
                 }
             }
@@ -150,7 +150,9 @@ const Home = () => {
                 collapsedWidth="0"
                 style={{
                     background: colorBgContainer,
+                    overflowY: 'scroll'
                 }}
+                className={style.sider}
             >
                 <div className={style.logo}>文件管理系统</div>
                 <Menu
@@ -164,7 +166,8 @@ const Home = () => {
                         }
                     ]}
                     onClick={(e) => {
-                        console.log(e.key);
+                        if (e.key.slice(0, 4) === 'file') return
+                        else navigate(e.key)
                     }}
                 />
             </Sider>
