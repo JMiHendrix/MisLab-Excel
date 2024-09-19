@@ -6,13 +6,14 @@ import * as XLSX from 'xlsx'
 import { MemoSheet } from '@/components/UniverSheet';
 import { useMessage } from '@/hooks/useMessage';
 import { convertToExcelFormat } from '@/utils';
+import { DEFAULT_WORKBOOK_DATA } from '@/assets/default-data'
 import { addExcel } from '@/apis/excel';
 import style from './index.module.css'
 
 const AddExcel = () => {
     const { error, contextHolder } = useMessage()
     const [open, setOpen] = useState(false);
-    const [data] = useState(false)
+    const [data] = useState({})
     const [loading, setLoading] = useState(false)
     const univerRef = useRef();
     const excelName = useRef('')
@@ -43,7 +44,7 @@ const AddExcel = () => {
             else navigate(`/home/list/${param.folder}`)
         } catch (e) {
             error({
-                content: '上传Excel失败',
+                content: '新增Excel失败',
                 callBack: () => setLoading(false)
             })
         }
@@ -66,6 +67,7 @@ const AddExcel = () => {
         const workbook = XLSX.utils.book_new();
 
         // 遍历每个工作表并将其添加到工作簿中
+        // 使用 univerRef.current?.getData() 可以避免Univer组件修改data，从而实现多次进入新增页面可以得到空表
         Object.keys(univerRef.current?.getData().sheets).forEach(sheetName => {
             const sheetData = univerRef.current?.getData().sheets[sheetName].cellData;
             const excelFormat = convertToExcelFormat(sheetData);
@@ -75,7 +77,8 @@ const AddExcel = () => {
         });
         XLSX.writeFile(workbook, `${ExportExcelName.current}.xlsx`, { compression: true });
     };
-    useEffect(() => {
+
+    useEffect(() => {        
         if (!loading) {
             setTimeout(() => {
                 const toolbar = document.querySelector('.univer-toolbar');
@@ -90,7 +93,7 @@ const AddExcel = () => {
             {contextHolder}
             {
                 loading ?
-                    <Spin /> :
+                    <Spin size='large' className={style.spin} /> :
                     <>
                         <MemoSheet style={{ flex: 1 }} ref={univerRef} data={data} />
                         <FloatButton.Group

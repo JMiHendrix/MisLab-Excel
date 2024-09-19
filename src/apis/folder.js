@@ -18,7 +18,19 @@ const getFolderTree = () => {
     })
 }
 
+const addFolder = ({ name, parentId }) => {
+    return request({
+        url: '/folder/add',
+        method: 'POST',
+        data: {
+            name,
+            parentId
+        }
+    })
+}
+
 export {
     getLayer,
-    getFolderTree
+    getFolderTree,
+    addFolder
 }

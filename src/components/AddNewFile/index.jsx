@@ -2,19 +2,38 @@ import { memo, useState, useRef } from 'react'
 import { Dropdown, Button, Modal, Form, Input } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
 import { DownOutlined, FileAddOutlined, FileExcelOutlined, FileMarkdownOutlined, FolderOpenOutlined } from '@ant-design/icons';
+import { addFolder } from '@/apis/folder';
+import { useMessage } from '@/hooks/useMessage';
 import style from './index.module.css'
 
 const AddNewFile = () => {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const navigate = useNavigate()
     const param = useParams()
+    const { error, contextHolder } = useMessage()
     const folderName = useRef('')
     const showModal = () => {
         setIsModalOpen(true);
     };
-    const handleOk = () => {
-        folderName.current = ''
-        setIsModalOpen(false);
+    const handleOk = async () => {
+        try {
+            let parentId = ''
+            if (param.id !== undefined) parentId = param.id 
+            await addFolder({
+                name: folderName.current,
+                parentId
+            })
+            folderName.current = ''
+            setIsModalOpen(false);
+        } catch (e) {
+            error({
+                content: '新增文件夹失败',
+                callBack: () => {
+                    folderName.current = ''
+                    setIsModalOpen(false);
+                }
+            })
+        }
     };
     const handleCancel = () => {
         folderName.current = ''
@@ -57,6 +76,7 @@ const AddNewFile = () => {
     };
     return (
         <>
+            {contextHolder}
             <Dropdown menu={menuProps} className={style.box}>
                 <Button>
                     <FileAddOutlined className={style.firIcon} />
