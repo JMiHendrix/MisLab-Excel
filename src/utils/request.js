@@ -8,7 +8,6 @@ const request = axios.create({
     // 解决跨域问题
     // baseURL: 'http://localhost:8080/http://1.117.70.79:4529',
     baseURL: 'http://1.117.70.79:4529',
-    timeout: 8000
 })
 
 // 添加请求拦截器

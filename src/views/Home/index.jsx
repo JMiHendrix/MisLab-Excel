@@ -1,7 +1,7 @@
 import { memo, useEffect, useState } from 'react'
 import { Outlet, useNavigate, useLocation } from 'react-router-dom'
-import { Layout, Menu, theme, Breadcrumb, Space, ConfigProvider, FloatButton, Tooltip } from 'antd';
-import { CloudOutlined, LogoutOutlined, FolderOutlined, EditOutlined, TableOutlined, FileOutlined } from '@ant-design/icons';
+import { Layout, Menu, theme, Breadcrumb, Space, ConfigProvider, FloatButton, Tooltip, Button } from 'antd';
+import { CloudOutlined, MenuUnfoldOutlined, MenuFoldOutlined, LogoutOutlined, FolderOutlined, EditOutlined, TableOutlined, FileOutlined } from '@ant-design/icons';
 import { MemoAddNewFile } from '@/components/AddNewFile';
 import { UploadFile } from '@/components/UploadFile';
 import { useMessage } from '@/hooks/useMessage';
@@ -24,6 +24,7 @@ const Home = () => {
     const param = useParams()
     const [folderLayer, setFolderLayer] = useState([])
     const [folderTree, SetFolderTree] = useState([])
+    const [collapsed, setCollapsed] = useState(false);
     const { message, type, visible } = useSelector(state => state.message)
     const { success, error, contextHolder } = useMessage()
     const exit = () => {
@@ -150,16 +151,21 @@ const Home = () => {
                     insetInlineEnd: 36,
                 }} />
             <Sider
-                width={200}
+                width={250}
                 breakpoint="lg"
-                collapsedWidth="0"
+                collapsed={collapsed}
+                onCollapse={setCollapsed}
+                collapsedWidth={80}
                 style={{
                     background: colorBgContainer,
                     overflowY: 'scroll',
                 }}
                 className={style.sider}
             >
-                <div className={style.logo}>文件管理系统</div>
+                <div className={style.logo}>{collapsed ? <CloudOutlined style={{
+                    fontSize: '25px',
+                    color: '#1677ff'
+                }} /> : '文件管理系统'}</div>
                 <Menu
                     mode="inline"
                     inlineIndent={8}
@@ -174,7 +180,7 @@ const Home = () => {
             </Sider>
             <Layout
                 style={{
-                    padding: '0 24px 24px',
+                    padding: '0 24px 0',
                 }}
             >
                 <Content
