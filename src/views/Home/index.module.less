@@ -44,11 +44,17 @@
 
 .sider {
     &::-webkit-scrollbar {
-        width: 5px;
+        height: 5px;
+        width: 3px;
     }
 
     &::-webkit-scrollbar-thumb {
         background: #ccc;
         border-radius: 5px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+        /* 背景透明减少滚动条视觉冲击 */
     }
 }

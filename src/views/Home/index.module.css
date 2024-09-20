@@ -30,9 +30,14 @@
   color: rgba(0, 0, 0, 0.88);
 }
 .sider::-webkit-scrollbar {
-  width: 5px;
+  height: 5px;
+  width: 3px;
 }
 .sider::-webkit-scrollbar-thumb {
   background: #ccc;
   border-radius: 5px;
+}
+.sider::-webkit-scrollbar-track {
+  background: transparent;
+  /* 背景透明减少滚动条视觉冲击 */
 }

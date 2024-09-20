@@ -1,6 +1,6 @@
 import { memo, useEffect, useState } from 'react'
 import { Outlet, useNavigate, useLocation } from 'react-router-dom'
-import { Layout, Menu, theme, Breadcrumb, Space, ConfigProvider, FloatButton } from 'antd';
+import { Layout, Menu, theme, Breadcrumb, Space, ConfigProvider, FloatButton, Tooltip } from 'antd';
 import { CloudOutlined, LogoutOutlined, FolderOutlined, EditOutlined, TableOutlined, FileOutlined } from '@ant-design/icons';
 import { MemoAddNewFile } from '@/components/AddNewFile';
 import { UploadFile } from '@/components/UploadFile';
@@ -102,7 +102,12 @@ const Home = () => {
             return {
                 key: returnKey(),
                 icon: returnIcon(),
-                label: item.name,
+                label: (
+                    <Tooltip title={item.name}>
+                        {item.name}
+                    </Tooltip>
+                )
+                ,
                 children: item.children && item.children.length > 0
                     ? transformToMenuItems(item.children)
                     : undefined,
@@ -150,21 +155,17 @@ const Home = () => {
                 collapsedWidth="0"
                 style={{
                     background: colorBgContainer,
-                    overflowY: 'scroll'
+                    overflowY: 'scroll',
                 }}
                 className={style.sider}
             >
                 <div className={style.logo}>文件管理系统</div>
                 <Menu
                     mode="inline"
-                    items={[
-                        {
-                            key: '/home',
-                            icon: <CloudOutlined />,
-                            label: '云盘',
-                            children: transformToMenuItems(folderTree)
-                        }
-                    ]}
+                    inlineIndent={8}
+                    items={
+                        transformToMenuItems(folderTree)
+                    }
                     onClick={(e) => {
                         if (e.key.slice(0, 4) === 'file') return
                         else navigate(e.key)
