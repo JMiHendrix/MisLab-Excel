@@ -29,8 +29,20 @@ const addFolder = ({ name, parentId }) => {
     })
 }
 
+const updateFolder = ({name, folderId}) => {
+    return request({
+        url: '/folder/update',
+        method: 'PUT',
+        data: {
+            name,
+            folderId
+        }
+    })
+}
+
 export {
     getLayer,
     getFolderTree,
-    addFolder
+    addFolder,
+    updateFolder
 }

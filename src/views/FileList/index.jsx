@@ -1,8 +1,9 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { Table, Dropdown, Button, Spin } from 'antd';
+import { Table, Dropdown, Button, Spin, Modal, Form, Input } from 'antd';
 import { FolderOutlined, PlusSquareOutlined, EllipsisOutlined, EditOutlined, TableOutlined, FileOutlined } from '@ant-design/icons';
 import { getFileList } from '@/apis/fileList';
+import { updateFolder } from '@/apis/folder';
 import { delContent, delExcel, delFolder, delFile } from '@/apis/delete';
 import { useMessage } from '@/hooks/useMessage';
 import { formatDate } from '@/utils';
@@ -62,11 +63,29 @@ const FileList = () => {
             width: 100,
             render: (text, record) => {
                 let menuItems = []
-                if (record.status === 1 || 2 || 3) menuItems = [
+                if (record.status === 1 || 3) menuItems = [
                     {
                         key: 'details',
                         label: '详情',
                         onClick: () => handleMenuClick('details', record),
+                    },
+                    {
+                        key: 'delete',
+                        label: '删除',
+                        danger: true,
+                        onClick: () => handleMenuClick('delete', record),
+                    },
+                ]
+                if (record.status === 2) menuItems = [
+                    {
+                        key: 'details',
+                        label: '详情',
+                        onClick: () => handleMenuClick('details', record),
+                    },
+                    {
+                        key: 'update',
+                        label: '更名',
+                        onClick: () => handleMenuClick('update', record),
                     },
                     {
                         key: 'delete',
@@ -117,6 +136,10 @@ const FileList = () => {
     const { error, contextHolder } = useMessage()
     const [list, setList] = useState([])
     const [loading, setLoading] = useState(true)
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [modalLoding, setModalLoading] = useState(false)
+    const [currentFolder, setCurrentFolder] = useState('')
+    const folderName = useRef('')
     const getList = async (id = '') => {
         try {
             setLoading(true)
@@ -164,6 +187,10 @@ const FileList = () => {
             }
             if (param.id === undefined) getList()
             else getList(param.id)
+        } else if (action === 'update') {
+            setCurrentFolder(record);
+            setIsModalOpen(true);
+            folderName.current = record.name;
         }
     };
     const handleClick = (record) => {
@@ -179,6 +206,23 @@ const FileList = () => {
             else navigate(`/excel/${param.id}/${record.id}`)
         }
     }
+    const handleOk = async () => {
+        setModalLoading(true);
+        try {
+            await updateFolder({ name: folderName.current, folderId: currentFolder.id });
+            setIsModalOpen(false);
+            setModalLoading(false);
+            refreshUrl()
+        } catch (e) {
+            error({ content: '更名失败' });
+            setModalLoading(false);
+        }
+    };
+
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    };
+
     useEffect(() => {
         if (param.id === undefined) getList()
         else getList(param.id)
@@ -205,6 +249,29 @@ const FileList = () => {
                         className={style.fileList}
                     />
             }
+            <Modal title={'更改文件夹名称'}
+                open={isModalOpen}
+                onOk={handleOk}
+                onCancel={handleCancel}
+                okText={'创建'}
+                cancelText={'取消'}
+                destroyOnClose={true}
+                confirmLoading={modalLoding}
+            >
+                <Form validateTrigger='onChange' colon={false}>
+                    <Form.Item name='name' label={'名称'}
+                        initialValue={folderName.current}
+                        rules={[() => ({
+                            validator(_, value) {
+                                folderName.current = value
+                                return Promise.resolve()
+                            }
+                        })]}
+                    >
+                        <Input placeholder="请输入文件夹名称" />
+                    </Form.Item>
+                </Form>
+            </Modal>
         </>
     );
 };
