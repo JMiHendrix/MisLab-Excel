@@ -28,7 +28,14 @@ const AddNewFile = () => {
             folderName.current = ''
             setIsModalOpen(false);
             setLoading(false)
-            navigate(`/home/list/${res.data}`, { state: { refresh: Date.now() } })
+            console.log(res);
+            if (res.message === '同一父文件夹下已存在相同名称的文件夹') {
+                error({
+                    content: res.message
+                })
+            } else {
+                navigate(`/home/list/${res.data}`, { state: { refresh: Date.now() } })
+            }
         } catch (e) {
             error({
                 content: '新增文件夹失败',
