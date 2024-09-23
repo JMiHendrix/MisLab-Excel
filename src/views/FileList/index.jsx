@@ -5,6 +5,7 @@ import { FolderOutlined, PlusSquareOutlined, EllipsisOutlined, EditOutlined, Tab
 import { getFileList } from '@/apis/fileList';
 import { updateFolder } from '@/apis/folder';
 import { delContent, delExcel, delFolder, delFile } from '@/apis/delete';
+import { downloadFile } from '@/apis/file';
 import { useMessage } from '@/hooks/useMessage';
 import { formatDate } from '@/utils';
 import style from './index.module.css'
@@ -153,6 +154,15 @@ const FileList = () => {
             setLoading(false)
         }
     }
+    const download = async (id) => {
+        try {
+            await downloadFile(id)
+        } catch(e) {
+            error({
+                content: '下载文件失败，请检查网络'
+            })
+        }
+    }
     const refreshUrl = () => {
         if (param.id === undefined) navigate(`/home`, { state: { refresh: Date.now() } })
         else navigate(`/home/list/${param.id}`, { state: { refresh: Date.now() } })
@@ -191,6 +201,8 @@ const FileList = () => {
             setCurrentFolder(record);
             setIsModalOpen(true);
             folderName.current = record.name;
+        } else if (action === 'download') {
+            download(record.id)
         }
     };
     const handleClick = (record) => {

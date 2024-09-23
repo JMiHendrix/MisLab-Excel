@@ -45,10 +45,10 @@ const Area = () => {
         await editContent({ title, author, content, id })
         getDetail()
     }
-    const ChangeIsEdit = () => {
+    const ChangeIsEdit = async () => {
         if (isEdit) {
             try {
-                edit({
+                await edit({
                     title: title.current,
                     author: author.current,
                     content: value,
@@ -65,6 +65,20 @@ const Area = () => {
         }
         setIsEdit(!isEdit)
     }
+    const saveContent = async () => {
+        try {
+            await editContent({
+                title: title.current,
+                author: author.current,
+                content: value,
+                id: param.id
+            });
+        } catch (e) {
+            error({
+                content: '实时更新失败，请尝试手动提交'
+            });
+        }
+    };
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -82,25 +96,11 @@ const Area = () => {
     useEffect(() => {
         let intervalId;
         if (isEdit) {
-            const saveContent = async () => {
-                try {
-                    await editContent({
-                        title: title.current,
-                        author: author.current,
-                        content: value,
-                        id: param.id
-                    });
-                } catch (e) {
-                    error({
-                        content: '实时更新失败，请尝试手动提交'
-                    });
-                }
-            };
-            intervalId = setInterval(saveContent, 3000); 
+            intervalId = setInterval(saveContent, 10000);
         }
         return () => clearInterval(intervalId);
-    }, [isEdit, value]); 
-    
+    }, [isEdit]);
+
     return (
         <>
             {contextHolder}

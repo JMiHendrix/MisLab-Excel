@@ -47,6 +47,9 @@ dependencies:
   axios:
     specifier: ^1.7.7
     version: 1.7.7
+  cors-anywhere:
+    specifier: ^0.4.4
+    version: 0.4.4
   normalize.css:
     specifier: ^8.0.1
     version: 8.0.1
@@ -1921,6 +1924,14 @@ packages:
       toggle-selection: 1.0.6
     dev: false
 
+  /cors-anywhere@0.4.4:
+    resolution: {integrity: sha512-8OBFwnzMgR4mNrAeAyOLB2EruS2z7u02of2bOu7i9kKYlZG+niS7CTHLPgEXKWW2NAOJWRry9RRCaL9lJRjNqg==}
+    engines: {node: '>=0.10.0'}
+    dependencies:
+      http-proxy: 1.11.1
+      proxy-from-env: 0.0.1
+    dev: false
+
   /crc-32@1.2.2:
     resolution: {integrity: sha512-ROmzCKrTnOwybPcJApAA6WBWij23HVfGVNKqqrZpuyZOHqK2CwHSvpGuyt/UNNvaIjEd8X5IFGp4Mh+Ie1IHJQ==}
     engines: {node: '>=0.8'}
@@ -2391,6 +2402,10 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
+  /eventemitter3@1.2.0:
+    resolution: {integrity: sha512-DOFqA1MF46fmZl2xtzXR3MPCRsXqgoFqdXcrCVYM3JNnfUeHTm/fh/v/iU7gBFpwkuBmoJPAm5GuhdDfSEJMJA==}
+    dev: false
+
   /eventemitter3@2.0.3:
     resolution: {integrity: sha512-jLN68Dx5kyFHaePoXWPsCGW5qdyZQtLYHkxkg02/Mz6g0kYpDx4FyP6XfArhQdlOC4b8Mv+EMxPo/8La7Tzghg==}
     dev: false
@@ -2624,6 +2639,14 @@ packages:
       entities: 1.1.2
       inherits: 2.0.4
       readable-stream: 3.6.2
+    dev: false
+
+  /http-proxy@1.11.1:
+    resolution: {integrity: sha512-qz7jZarkVG3G6GMq+4VRJPSN4NkIjL4VMTNhKGd8jc25BumeJjWWvnY3A7OkCGa8W1TTxbaK3dcE0ijFalITVA==}
+    engines: {node: '>=0.10.0'}
+    dependencies:
+      eventemitter3: 1.2.0
+      requires-port: 0.0.1
     dev: false
 
   /ignore@5.3.2:
@@ -3226,6 +3249,10 @@ packages:
       '@protobufjs/utf8': 1.1.0
       '@types/node': 22.5.5
       long: 5.2.3
+    dev: false
+
+  /proxy-from-env@0.0.1:
+    resolution: {integrity: sha512-B9Hnta3CATuMS0q6kt5hEezOPM+V3dgaRewkFtFoaRQYTVNsHqUvFXmndH06z3QO1ZdDnRELv5vfY6zAj/gG7A==}
     dev: false
 
   /proxy-from-env@1.1.0:
@@ -3995,6 +4022,10 @@ packages:
   /require-directory@2.1.1:
     resolution: {integrity: sha512-fGxEI7+wsG9xrvdjsrlmL22OMTTiHRwAMroiEeMgq8gzoLC/PQr7RsRDSTLUg/bZAZtF+TVIkHc6/4RIKrui+Q==}
     engines: {node: '>=0.10.0'}
+    dev: false
+
+  /requires-port@0.0.1:
+    resolution: {integrity: sha512-AzPDCliPoWDSvEVYRQmpzuPhGGEnPrQz9YiOEvn+UdB9ixBpw+4IOZWtwctmpzySLZTy7ynpn47V14H4yaowtA==}
     dev: false
 
   /reselect@5.1.1:
