@@ -13,6 +13,7 @@ import { clearUserInfo } from '@/store/modules/user';
 import { clearToken } from '@/utils';
 import { useParams } from 'react-router-dom';
 import { getLayer, getFolderTree } from '@/apis/folder'
+import { previewFile } from '@/apis/file';
 const { Content, Sider } = Layout;
 const Home = () => {
     const {
@@ -63,6 +64,16 @@ const Home = () => {
             })
         }
     }
+    const preview = async (id) => {
+        try {
+            const res = await previewFile(id)
+            window.open(res.data, '_blank')
+        } catch (e) {
+            error({
+                content: '下载文件失败，请检查网络'
+            })
+        }
+    }
     const transformToMenuItems = (data) => {
         return data.map(item => {
             const returnKey = () => {
@@ -77,7 +88,7 @@ const Home = () => {
                         return `/excel/main/${item.id}`
                     }
                     if (item.status === 4) {
-                        return `file${item.name}${item.id}`
+                        return `file${item.id}`
                     }
                 } else {
                     if (item.status === 1) {
@@ -90,7 +101,7 @@ const Home = () => {
                         return `/excel/${item.folderId}/${item.id}`
                     }
                     if (item.status === 4) {
-                        return `file${item.name}${item.id}`
+                        return `file${item.id}`
                     }
                 }
             }
@@ -173,7 +184,7 @@ const Home = () => {
                         transformToMenuItems(folderTree)
                     }
                     onClick={(e) => {
-                        if (e.key.slice(0, 4) === 'file') return
+                        if (e.key.slice(0, 4) === 'file') preview(e.key.slice(4));
                         else navigate(e.key)
                     }}
                 />

@@ -98,7 +98,7 @@ const FileList = () => {
                 if (record.status === 4) menuItems = [
                     {
                         key: 'download',
-                        label: '下载',
+                        label: '操作',
                         onClick: () => handleMenuClick('download', record),
                     },
                     {
@@ -157,7 +157,7 @@ const FileList = () => {
     const preview = async (id) => {
         try {
             const res = await previewFile(id)
-            window.open(res.data, '_blank') 
+            window.open(res.data, '_blank')
         } catch (e) {
             error({
                 content: '下载文件失败，请检查网络'
