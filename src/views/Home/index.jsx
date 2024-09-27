@@ -165,7 +165,7 @@ const Home = () => {
                 <div className={style.logo}>{collapsed ? <CloudOutlined style={{
                     fontSize: '25px',
                     color: '#1677ff'
-                }} /> : '文件管理系统'}</div>
+                }} /> : '论文管理系统'}</div>
                 <Menu
                     mode="inline"
                     inlineIndent={8}

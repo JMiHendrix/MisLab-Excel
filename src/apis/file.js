@@ -35,7 +35,15 @@ const downloadFile = (id) => {
     });
 }
 
+const previewFile = (id) => {
+    return request({
+        url: `/minio/preview/${id}`,
+        method: 'GET'
+    })
+}
+
 export {
     uploadFile,
-    downloadFile
+    downloadFile,
+    previewFile
 }
