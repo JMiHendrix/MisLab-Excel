@@ -1,10 +1,12 @@
-import { memo, useEffect } from "react";
+import { memo, useEffect, useState } from "react";
 import { Card, Form, Input, Button } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchLogin } from "../../store/modules/user";
 import { useNavigate } from "react-router-dom";
 import { useMessage } from "../../hooks/useMessage";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
+import { getCaptcha } from "@/apis/captcha";
+import { runes } from 'runes2';
 import BG from "../../utils/BG";
 import style from "./index.module.css";
 import { showMessage } from "@/store/modules/message";
@@ -12,8 +14,22 @@ import { showMessage } from "@/store/modules/message";
 const Login = () => {
     const { success, error, warn, contextHolder } = useMessage()
     const { message, type, visible } = useSelector(state => state.message)
+    const [captchaImage, setCaptchaImage] = useState(null);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    const captcha = async () => {
+        try {
+            const res = await getCaptcha()
+            const blob = new Blob([res], { type: "image/png" });
+            const imageUrl = URL.createObjectURL(blob);
+            setCaptchaImage(imageUrl);
+        } catch (e) {
+            error({
+                content: '获取验证码失败'
+            })
+        }
+    }
 
     const onFinish = async (values) => {
         try {
@@ -21,6 +37,7 @@ const Login = () => {
             dispatch(showMessage({ message: '登录成功', type: 'success' }))
             navigate('/home')
         } catch (e) {
+            console.log(e.code);
             error({
                 content: '账号或密码错误！'
             })
@@ -38,6 +55,10 @@ const Login = () => {
             })
         }
     }, [visible, message, type])
+
+    useEffect(() => {
+        captcha()
+    }, [])
 
     return (
         <div>
@@ -77,6 +98,34 @@ const Login = () => {
                                 placeholder="请输入密码"
                                 className={style.logoInput}
                             />
+                        </Form.Item>
+                        <Form.Item style={{
+                            marginBottom: 0,
+                        }}>
+                            <Form.Item
+                                name='captcha'
+                                style={{
+                                    display: 'inline-block',
+                                    marginRight: '20px',
+                                    width: 210
+                                }}
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: "请输入验证码",
+                                    },
+                                ]}
+                            >
+                                <Input
+                                    count={{
+                                        show: true,
+                                        max: 5,
+                                        strategy: (txt) => runes(txt).length,
+                                        exceedFormatter: (txt, { max }) => runes(txt).slice(0, max).join('')
+                                    }}
+                                />
+                            </Form.Item>
+                            {captchaImage && <img src={captchaImage} alt="captcha" className={style.img} onClick={captcha} />}
                         </Form.Item>
                         <Form.Item>
                             <Button type="primary" htmlType="submit" size="large" block>
