@@ -1,13 +1,13 @@
 import { memo, useEffect, useState } from "react";
 import { Card, Form, Input, Button } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchLogin } from "../../store/modules/user";
+import { fetchLogin } from "@/store/modules/user";
 import { useNavigate } from "react-router-dom";
-import { useMessage } from "../../hooks/useMessage";
+import { useMessage } from "@/hooks/useMessage";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { getCaptcha } from "@/apis/captcha";
 import { runes } from 'runes2';
-import BG from "../../utils/BG";
+import BG from "@/utils/BG";
 import style from "./index.module.css";
 import { showMessage } from "@/store/modules/message";
 
