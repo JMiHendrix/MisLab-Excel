@@ -30,7 +30,8 @@ const userReducer = userStore.reducer
 const fetchLogin = (loginForm) => {
     return async (dispatch) => {
         const res = await request.post('/user/login', loginForm)
-        dispatch(setToken(res.data.token))
+        if (res.message === '验证码错误或已过期') throw new Error('Token not found');
+        else dispatch(setToken(res.data.token))
     }
 }
 

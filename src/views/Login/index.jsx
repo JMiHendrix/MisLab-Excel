@@ -37,10 +37,15 @@ const Login = () => {
             dispatch(showMessage({ message: '登录成功', type: 'success' }))
             navigate('/home')
         } catch (e) {
-            console.log(e.code);
-            error({
-                content: '账号或密码错误！'
-            })
+            if (e.message === 'Token not found') {
+                error({
+                    content: '验证码错误，请重新输入'
+                })
+            } else {
+                error({
+                    content: '账号或密码错误！'
+                })
+            }
         }
     };
 
