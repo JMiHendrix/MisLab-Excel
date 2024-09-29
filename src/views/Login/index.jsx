@@ -37,7 +37,7 @@ const Login = () => {
             dispatch(showMessage({ message: '登录成功', type: 'success' }))
             navigate('/home')
         } catch (e) {
-            if (e.message === 'Token not found') {
+            if (e.message === 'Captcha error.') {
                 error({
                     content: '验证码错误，请重新输入'
                 })
